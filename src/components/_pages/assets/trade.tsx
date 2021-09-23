@@ -11,6 +11,7 @@ import { dialog, loader, getRandom, getShortAddress, upperCase, lowerCase } from
 import { NFTItem } from '@/types'
 import { Connectors } from '@/types/constants'
 import { notification as notice } from 'antd'
+import { demoService } from '@/services/demo.service'
 
 export function TradeComponent({ data }: { data: NFTItem }) {
   // __STATE <React.Hooks>
@@ -36,6 +37,12 @@ export function TradeComponent({ data }: { data: NFTItem }) {
       modal(<ModalChackout item={data} account={account} />)
     }
   }, [account, data])
+
+  const handleClaim = () => {
+    console.log('handleClaim')
+    // demoService.swapNFT()
+
+  }
 
   // __RENDER
   return (
@@ -76,6 +83,12 @@ export function TradeComponent({ data }: { data: NFTItem }) {
             <span className='text'>Connect Wallet</span>
           </button>
         )}
+
+        <button className='btn btn-dark btn-connect' onClick={handleClaim}>
+          <span className='icon bi bi-bag'></span>
+          <span className='text'>Claim Now</span>
+        </button>
+
       </div>
     </div>
   )
