@@ -1,0 +1,46 @@
+.ui--profile {
+  &-menu {
+    display: grid;
+    grid-gap: 2rem;
+    grid-template-columns: 1fr auto;
+    padding: 0 0 0.25rem;
+    margin: 0 0 2rem;
+    border-bottom: 1px solid $color-dark-2;
+
+    .group {
+      display: grid;
+      grid-gap: 0.25rem;
+      grid-auto-flow: column;
+      justify-content: flex-start;
+    }
+
+    .list {
+      display: grid;
+      grid-gap: 0.75rem;
+      grid-auto-flow: column;
+      align-items: center;
+      cursor: pointer;
+      height: 38px;
+      padding: 0 1.25rem;
+      border-radius: $border-radius-small;
+
+      &:hover,
+      &.active {
+        background-color: rgba($color-dark-2, 0.4);
+
+        .icon {
+          color: $color-primary;
+        }
+
+        .text {
+          color: $color-dark;
+        }
+      }
+
+      .text {
+        color: $color-dark-6;
+        text-transform: capitalize;
+      }
+    }
+  }
+}

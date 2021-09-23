@@ -1,0 +1,10 @@
+.ui--home-auction {
+  position: relative;
+
+  &-container {
+    display: grid;
+    grid-gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    grid-auto-flow: dense;
+  }
+}

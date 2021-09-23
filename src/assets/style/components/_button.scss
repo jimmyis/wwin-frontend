@@ -1,0 +1,74 @@
+.btn {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+  color: $color-dark;
+  background-color: transparent;
+  border-radius: $border-radius-small;
+  user-select: none;
+  transition: all $transition-time ease;
+
+  .icon {
+    line-height: 0;
+    font-size: $font-size-large;
+  }
+
+  .text {
+    line-height: 1;
+    font-weight: $font-weight-bold;
+  }
+
+  &-default {
+    color: $color-primary;
+
+    &:hover {
+      color: $color-primary;
+      text-decoration: underline;
+    }
+  }
+
+  &-primary {
+    color: white !important;
+    background-color: $color-primary;
+
+    &:hover {
+      box-shadow: 0 0 0 3px rgba($color-primary, 0.25);
+    }
+  }
+
+  &-secondary {
+    color: $color-primary !important;
+    box-shadow: 0 0 0 1px tint($color-primary, 60%);
+
+    &:hover {
+      box-shadow: 0 0 0 1px tint($color-primary, 40%), 0 0 0 3px rgba($color-primary, 0.08);
+    }
+  }
+
+  &-overlay {
+    background-color: tint($color-dark-2, 40%);
+
+    &:hover {
+      color: $color-primary;
+    }
+  }
+
+  &-dark {
+    color: white !important;
+    background-color: $color-dark;
+
+    &:hover {
+      box-shadow: 0 0 0 3px rgba($color-dark-6, 0.15);
+    }
+  }
+
+  &:disabled,
+  &.disabled {
+    opacity: 0.75;
+    cursor: not-allowed;
+    text-decoration: line-through;
+  }
+}

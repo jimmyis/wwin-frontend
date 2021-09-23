@@ -1,0 +1,198 @@
+// SET global classes.
+.ui- {
+  &-wrapper {
+    display: grid;
+    grid-template-rows: 80px 1fr;
+    grid-template-areas: "area-navbar" "router-view";
+    min-height: 100vh;
+
+    @include screen-xs {
+      grid-template-rows: 60px 1fr;
+    }
+
+    .router-view {
+      position: relative;
+      padding: 3rem;
+      grid-area: router-view;
+
+      &.disabled {
+        pointer-events: none !important;
+      }
+
+      .is-empty {
+        position: relative;
+        margin: 0 1rem;
+        padding: 2rem;
+        text-align: center;
+        border-radius: $border-radius-medium;
+        border: 1px solid $color-dark-2;
+        background-color: tint($color-dark-2, 75%);
+  
+        .icon {
+          color: $color-dark-6;
+          font-size: $font-size-larger * 2;
+        }
+  
+        .text {
+          color: $color-dark-6;
+          font-size: $font-size-larger;
+          font-weight: $font-weight-light;
+        }
+  
+        .btn {
+          text-transform: capitalize;
+          margin: 1rem 0 0;
+        }
+      }
+    }
+
+    .router-container {
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    .cursor-none {
+      pointer-events: none;
+    }
+
+    pre, code {
+      padding: 0.75rem 1rem;
+      color: $color-hunt-5;
+      background-color: $color-dark-8;
+      border-radius: $border-radius-small;
+    }
+  }
+
+  &-media {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: $border-radius-medium;
+    background-color: $color-dark-2;
+
+    .media {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition: all 0.6s ease;
+
+      &.image {
+        pointer-events: none;
+      }
+    }
+  }
+
+  &-currency {
+    display: grid;
+    grid-gap: 0.5rem;
+    grid-auto-flow: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    // &.small {}
+
+    &.medium {
+      .text {
+        line-height: 20px;
+        font-size: $font-size-large;
+      }
+    }
+
+    &.large {
+      .icon {
+        width: 26px;
+        height: 26px;
+      }
+
+      .text {
+        font-size: $font-size-larger;
+      }
+    }
+
+    .icon {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+      object-position: center;
+      pointer-events: none;
+    }
+
+    .text {
+      line-height: 0;
+      font-weight: $font-weight-bold;
+    }
+
+    .unit {
+      align-self: flex-end;
+      color: $color-dark-4;
+      text-transform: uppercase;
+    }
+  }
+
+  &-page {
+    &-error {
+      padding: 10vh 4rem;
+      text-align: center;
+  
+      .h1 {
+        font-size: 6rem;
+        font-weight: $font-weight-bolder;
+      }
+    
+      .h3 {
+        margin: 0.5rem 0;
+        font-size: $font-size-larger * 1.25;
+        font-weight: $font-weight-bolder;
+      }
+    
+      .h4, .h5 {
+        color: $color-dark-4;
+        line-height: $line-height;
+      }
+    }
+  }
+
+  &-labs {
+    .btn {
+      height: 40px;
+      padding: 0 2rem;
+      
+      .text {
+        text-transform: uppercase;
+      }
+    }
+  }
+}
+
+.ant {
+  &-notification {
+    &-notice {
+      padding: 1rem;
+      border-radius: $border-radius-medium;
+      box-shadow: 0 5px 15px rgba($color-dark, 0.08);
+
+      &-description {
+        color: $color-dark-6;
+      }
+    }
+  }
+}
+
+// SET: Global CSS Variables.
+:root {
+  --color-primary: #{$color-primary};
+  --color-dark   : #{$color-dark};
+  --color-dark-2 : #{$color-dark-2};
+  --color-dark-4 : #{$color-dark-4};
+  --color-dark-6 : #{$color-dark-6};
+  --color-dark-8 : #{$color-dark-8};
+  --color-hunt-1 : #{$color-hunt-1};
+  --color-hunt-2 : #{$color-hunt-2};
+  --color-hunt-3 : #{$color-hunt-3};
+  --color-hunt-4 : #{$color-hunt-4};
+  --color-hunt-5 : #{$color-hunt-5};
+  --color-hunt-6 : #{$color-hunt-6};
+  --color-hunt-7 : #{$color-hunt-7};
+}

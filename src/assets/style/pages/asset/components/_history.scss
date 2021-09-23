@@ -1,0 +1,75 @@
+.ui--asset-history {
+  position: relative;
+  margin: 3rem auto 0;
+  max-width: $screen-lg;
+
+  @include screen-sm {
+    margin: 2rem auto 0;
+  }
+
+  &-header {
+    .h2 {
+      font-size: $font-size-larger + 2;
+      font-weight: $font-weight-bold;
+    }
+  }
+
+  &-body {
+    margin: 0.5rem 0 0;
+    border-radius: $border-radius-medium;
+    border: 1px solid $color-dark-2;
+
+    .event {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+
+      .text {
+        margin-left: 0.5rem;
+        text-transform: capitalize;
+        font-weight: $font-weight-bold;
+      }
+    }
+
+    .currency {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+
+      .icon {
+        width: 16px;
+        height: 16px;
+        object-fit: contain;
+        object-position: center;
+      }
+
+      .text {
+        margin-left: 0.25rem;
+        line-height: 1;
+        font-weight: $font-weight-bold;
+      }
+    }
+
+    .router-link {
+      color: $color-primary;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .ant {
+    &-table {
+      background-color: transparent;
+
+      &-thead > tr > th {
+        background-color: transparent;
+      }
+    }
+
+    &-pagination {
+      margin: 1rem;
+    }
+  }
+}

@@ -1,0 +1,33 @@
+.ui--asset-chart {
+  position: relative;
+
+  &-header {
+    margin: 0 0 0.5rem;
+
+    .h2 {
+      font-size: $font-size-larger;
+      font-weight: $font-weight-bold;
+    }
+  }
+
+  &-body {
+    padding: 1rem;
+    border-radius: $border-radius-medium;
+    border: 1px solid $color-dark-2;
+  }
+
+  &-empty {
+    padding: 4rem 0;
+    text-align: center;
+    color: $color-dark-4;
+
+    .icon {
+      font-size: 2rem;
+    }
+
+    .text {
+      display: block;
+      font-weight: $font-weight-light;
+    }
+  }
+}

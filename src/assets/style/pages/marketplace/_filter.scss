@@ -1,0 +1,107 @@
+.ui--marketplace-filter {
+  &-body {
+    position: relative;
+    display: grid;
+    grid-gap: 1rem;
+    padding: 1rem 0;
+    overflow: hidden auto;
+    max-height: calc(100vh - 20rem);
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    // .ul {}
+
+    .li {
+      display: grid;
+      grid-gap: 0.75rem;
+      grid-template-columns: 18px 1fr;
+      align-items: center;
+      cursor: pointer;
+      height: 30px;
+
+      &:hover {
+        .label {
+          text-decoration: underline;
+        }
+      }
+
+      &.checked {
+        .icon {
+          color: white;
+          background-color: $color-primary;
+        }
+      }
+
+      .icon {
+        width: 18px;
+        height: 18px;
+        line-height: 20px;
+        text-align: center;
+        font-size: $font-size-large;
+        border-radius: $border-radius-small;
+        background-color: $color-dark-2;
+        color: $color-dark-4;
+      }
+
+      .label {
+        color: $color-dark-6;
+      }
+    }
+
+    .price {
+      display: grid;
+      grid-gap: 0.5rem;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      padding: 0.5rem 0 0;
+
+      input {
+        padding: 0.5rem 1rem;
+        border-radius: $border-radius-small;
+        border: 1px solid $color-dark-2;
+
+        &:hover {
+          border-color: tint($color-indigo, 30%);
+          box-shadow: 0 0 0 3px rgba($color-indigo, 0.12);
+        }
+      }
+
+      .text {
+        color: $color-dark-6;
+        font-weight: $font-weight-bold;
+      }
+    }
+  }
+
+  &-footer {
+    display: grid;
+    grid-gap: 1rem;
+    grid-auto-flow: column;
+    justify-content: flex-end;
+    padding: 1rem 0 0;
+    border-top: 1px solid $color-dark-2;
+
+    .btn {
+      height: 35px;
+
+      .text {
+        text-transform: capitalize;
+      }
+
+      &-apply {
+        padding: 0 2rem;
+      }
+
+      &-reset {
+        padding: 0 0.5rem;
+        color: $color-dark-6;
+
+        .text {
+          font-weight: $font-weight-regular;
+        }
+      }
+    }
+  }
+}

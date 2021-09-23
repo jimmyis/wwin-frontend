@@ -1,0 +1,145 @@
+.ui--collect-view {
+  &-header {
+    position: relative;
+    margin: 0 0 3.5rem;
+
+    .collect {
+      &-cover {
+        position: relative;
+        height: 240px;
+        overflow: hidden;
+        border-radius: $border-radius-large;
+        background-color: tint($color-dark-2, 25%);
+      }
+
+      &-info {
+        position: relative;
+        margin: -7rem auto 0;
+        max-width: $screen-xs;
+        text-align: center;
+      }
+
+      &-action {
+        position: absolute;
+        top: 240px;
+        right: 0;
+        z-index: 2;
+        display: grid;
+        grid-gap: 1rem;
+        grid-auto-flow: column;
+        align-items: center;
+        padding: 1rem 0 0;
+      }
+
+      &-logo {
+        position: relative;
+        width: 128px;
+        height: 128px;
+        margin: 0 auto 1rem;
+        overflow: hidden;
+        border-radius: 100%;
+        box-shadow: 0 0 0 5px white;
+        background-color: $color-dark-2;
+      }
+
+      &-name {
+        font-size: $font-size-larger * 1.25;
+        font-weight: $font-weight-bold;
+        text-transform: capitalize;
+        text-align: center;
+      }
+
+      &-stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        justify-content: center;
+        margin: 1rem 0;
+        border-radius: $border-radius-medium;
+        border: 1px solid $color-dark-2;
+
+        .column {
+          cursor: default;
+          padding: 0.75rem;
+          border-right: 1px solid $color-dark-2;
+
+          &:last-child {
+            border: none;
+          }
+        }
+
+        .value {
+          font-size: $font-size-larger;
+          font-weight: $font-weight-bold;
+
+          .icon {
+            margin-right: 0.25rem;
+            width: 16px;
+            height: 16px;
+            object-fit: contain;
+            object-position: center;
+          }
+        }
+
+        .label {
+          color: $color-dark-4;
+          font-size: $font-size-small;
+          font-weight: $font-weight-light;
+          text-transform: uppercase;
+        }
+      }
+
+      &-desc {
+        margin: 0.75rem 0 0;
+        color: $color-dark-6;
+        font-size: $font-size-large;
+      }
+    }
+
+    .image {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      pointer-events: none;
+    }
+  }
+
+  &-body {
+    display: grid;
+    grid-gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    grid-auto-flow: dense;
+  }
+
+  &-footer {
+    position: relative;
+    margin: 3.5rem 0 0;
+    text-align: center;
+  }
+
+  &-empty {
+    padding: 2rem 0 0;
+  }
+
+  .btn {
+    .text {
+      text-transform: capitalize;
+    }
+
+    &-add,
+    &-load {
+      height: 40px;
+      padding: 0 2rem;
+    }
+
+    &-edit {
+      width: 40px;
+      height: 40px;
+
+      .icon {
+        font-size: $font-size-large + 2;
+      }
+    }
+  }
+}

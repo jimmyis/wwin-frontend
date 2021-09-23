@@ -1,0 +1,43 @@
+.ui--collapse {
+  &:not(.is-collapse) {
+    @include class-endWith('-body') {
+      display: none;
+    }
+  }
+
+  &-header {
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-columns: 1fr auto;
+    line-height: 35px;
+    cursor: pointer;
+    padding: 0 0.75rem;
+    background-color: tint($color-dark-2, 50%);
+
+    .label {
+      text-transform: capitalize;
+      font-size: $font-size-medium;
+      font-weight: $font-weight-bold;
+    }
+
+    .icon {
+      color: $color-dark-6;
+      font-size: $font-size-larger;
+    }
+  }
+
+  &-body {
+    padding: 0.5rem 0.75rem;
+    overflow: hidden auto;
+    max-height: 20rem;
+    user-select: none;
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: $color-dark-2;
+    }
+  }
+}

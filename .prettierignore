@@ -1,0 +1,6 @@
+# Ignore artifacts: Scss
+**/style/core/*.scss
+**/style/main.scss
+
+# Ignore artifacts: TypeScript
+**/utils/defineProperty.ts

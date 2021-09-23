@@ -1,0 +1,100 @@
+.ui--connect {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 140;
+  padding: 4rem;
+  background-color: rgba($color-dark, 0.5);
+
+  &.enter,
+  &.exit-active {
+    @include class-endWith('-container') {
+      opacity: 0;
+      transform: translate(0, -4px);
+    }
+  }
+
+  &.enter-active {
+    @include class-endWith('-container') {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+  }
+
+  &-container {
+    position: relative;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 3rem;
+    border-radius: $border-radius-medium;
+    background-color: white;
+    box-shadow: 0 10px 20px rgba($color-dark, 0.1);
+    transition: all $transition-time $cubic-bezier;
+  }
+
+  &-header {
+    position: relative;
+    margin: 0 0 1.5rem;
+
+    .title {
+      font-size: $font-size-large;
+      font-weight: $font-weight-bold;
+    }
+
+    .btn {
+      &-close {
+        position: absolute;
+        top: 2px;
+        right: 0;
+        width: 20px;
+        height: 20px;
+        justify-content: center;
+
+        &:hover {
+          color: white;
+          background-color: $color-hunt-3;
+        }
+
+        .icon {
+          font-size: $font-size-large + 2;
+        }
+      }
+    }
+  }
+
+  &-body {
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-columns: repeat(2, 1fr);
+    min-width: 320px;
+  }
+
+  &-option {
+    cursor: pointer;
+    padding: 2rem 1rem;
+    border-radius: $border-radius-medium;
+    border: 1px solid $color-dark-2;
+    transition: all $transition-time ease;
+
+    &:hover {
+      box-shadow:
+        0 0 0 1px rgba($color-dark-4, 0.3),
+        0 0 0 4px rgba($color-dark-6, 0.1);
+    }
+
+    .icon {
+      display: block;
+      height: 40px;
+      margin: 0 auto 0.5rem;
+    }
+
+    .name {
+      color: $color-hunt-1;
+      font-weight: $font-weight-bold;
+      text-transform: capitalize;
+      text-align: center;
+    }
+  }
+}

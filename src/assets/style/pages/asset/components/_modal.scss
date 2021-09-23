@@ -1,0 +1,86 @@
+.ui--asset-modal {
+  &-footer {
+    text-align: center;
+    padding: 1rem 0 0;
+    margin: 1rem 0 0;
+    border-top: 1px solid $color-dark-2;
+
+    .btn {
+      &-checkout {
+        height: 40px;
+        padding: 0 3rem;
+        text-transform: capitalize;
+      }
+    }
+  }
+
+  &.checkout {
+    .h3 {
+      text-transform: capitalize;
+      font-size: $font-size-large + 2;
+      font-weight: $font-weight-bold;
+    }
+
+    .ul {
+      display: grid;
+      grid-gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .item {
+      display: grid;
+      grid-gap: 1rem;
+      grid-template-columns: 60px 1fr auto;
+      align-items: center;
+      border-radius: $border-radius-medium;
+      border: 1px solid $color-dark-2;
+      padding: 1rem;
+
+      .media {
+        width: 60px;
+      }
+
+      .meta {
+        .name {
+          font-size: $font-size-large;
+          font-weight: $font-weight-bold;
+
+          @include text-overflow(26px, 1);
+        }
+
+        .desc {
+          color: $color-dark-6;
+          font-weight: $font-weight-light;
+        }
+      }
+    }
+
+    .summary {
+      display: grid;
+      grid-auto-flow: column;
+      justify-content: space-between;
+      margin: 0 0 1rem;
+    }
+  }
+
+  &.purchase {
+    text-align: center;
+
+    .icon {
+      color: #2ecc71;
+      font-size: $font-size-larger * 2.25;
+    }
+
+    .h2 {
+      line-height: 2;
+      font-size: $font-size-larger;
+      font-weight: $font-weight-bold;
+    }
+
+    .h6 {
+      color: $color-dark-6;
+      font-size: $font-size-small;
+      font-weight: $font-weight-light;
+    }
+  }
+}

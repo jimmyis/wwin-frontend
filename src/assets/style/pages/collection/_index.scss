@@ -1,0 +1,41 @@
+@import './create', './view';
+
+.ui--collect {
+  margin: 1rem 1rem 0;
+
+  &-header {
+    position: relative;
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: space-between;
+    margin: 0 0 3.5rem;
+
+    .h1 {
+      font-size: $font-size-larger + 2;
+      font-weight: $font-weight-bold;
+      text-transform: capitalize;
+    }
+
+    .desc {
+      color: $color-dark-6;
+      font-size: $font-size-large;
+    }
+  }
+
+  &-body {
+    &.grid {
+      display: grid;
+      grid-gap: 2rem;
+      grid-auto-flow: dense;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    }
+  }
+
+  .btn {
+    &-create {
+      align-self: flex-end;
+      height: 40px;
+      padding: 0 1.5rem;
+    }
+  }
+}

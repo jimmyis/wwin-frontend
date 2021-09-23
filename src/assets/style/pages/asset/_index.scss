@@ -1,0 +1,215 @@
+@import './create', './sell', './components/property', './components/modal';
+
+.ui--assets {
+  &-container {
+    display: grid;
+    grid-gap: 2rem 6rem;
+    grid-template-columns: 1.5fr 1fr;
+    align-items: flex-start;
+    margin: 0 auto;
+    max-width: $screen-lg;
+
+    @include screen-sm {
+      grid-gap: 2rem;
+      grid-template-columns: unset;
+      grid-template-areas: 'area-media' 'area-content';
+    }
+
+    .content-header {
+      font-size: $font-size-larger;
+      font-weight: $font-weight-bold;
+      text-transform: capitalize;
+      margin: 0 0 1rem;
+    }
+  }
+
+  &-columns {
+    display: grid;
+    grid-gap: 3rem;
+
+    &:nth-child(1) {
+      @include screen-sm {
+        grid-area: area-content;
+      }
+    }
+
+    &:nth-child(2) {
+      @include screen-sm {
+        grid-area: area-media;
+      }
+    }
+  }
+
+  &-header {
+    position: relative;
+
+    .name {
+      line-height: $line-height;
+      font-size: $font-size-larger * 1.5;
+      font-weight: $font-weight-bolder;
+    }
+
+    .collection {
+      color: $color-indigo;
+      font-size: $font-size-large;
+      margin: 0.25rem 0 0;
+    }
+  }
+
+  &-media {
+    .media {
+      object-fit: contain;
+      border-radius: $border-radius-small;
+      background-color: $color-dark;
+
+      &.image {
+        @include screen-sm-min {
+          object-fit: cover;
+        }
+      }
+    }
+  }
+
+  &-trade {
+    position: relative;
+    padding: 2rem;
+    border-radius: $border-radius-medium;
+    border: 1px solid $color-dark-2;
+
+    .status {
+      display: grid;
+      grid-gap: 3rem;
+      grid-auto-flow: column;
+      justify-content: flex-start;
+
+      .columns {
+        display: grid;
+        grid-gap: 0.75rem;
+        grid-auto-flow: column;
+        align-items: center;
+        color: $color-dark-8;
+
+        .icon {
+          line-height: 0;
+          color: $color-dark-6;
+          font-size: $font-size-large;
+        }
+      }
+    }
+
+    .actions {
+      margin: 0.5rem 0 0;
+      padding: 1.5rem 0 0;
+      border-top: 1px solid $color-dark-2;
+
+      .label {
+        text-transform: capitalize;
+        font-size: $font-size-larger;
+        font-weight: $font-weight-light;
+      }
+
+      .currency {
+        margin: 0.75rem 0 0;
+
+        .icon {
+          width: 32px;
+          height: 32px;
+        }
+
+        .text {
+          font-size: 36px;
+          padding: 0 0 0 0.5rem;
+        }
+
+        .unit {
+          align-self: flex-end;
+          color: $color-dark-4;
+          text-transform: uppercase;
+        }
+      }
+
+      .btn {
+        &-shop,
+        &-connect {
+          margin: 2rem 0 0;
+          width: 100%;
+          height: 50px;
+          font-size: $font-size-large;
+
+          .icon {
+            font-size: $font-size-larger;
+          }
+
+          .text {
+            margin-left: 1rem;
+            text-transform: uppercase;
+          }
+        }
+      }
+    }
+  }
+
+  &-details {
+    @include screen-sm {
+      display: none;
+    }
+
+    .ul {
+      display: grid;
+      grid-gap: 0.5rem;
+    }
+
+    .li {
+      display: grid;
+      grid-gap: 1rem;
+      grid-template-columns: repeat(2, 1fr);
+      color: $color-dark-6;
+
+      .label {
+        color: $color-dark;
+      }
+
+      .value {
+        .btn {
+          font-weight: $font-weight-bold;
+        }
+      }
+    }
+  }
+
+  &-desc {
+    .description {
+      color: $color-dark-6;
+      font-size: $font-size-large;
+      line-height: $line-height;
+
+      .mt-4 {
+        margin-top: 0.75rem;
+      }
+
+      .text-lg {
+        color: $color-dark-8;
+        font-size: $font-size-large + 2;
+      }
+
+      .text-primary-500 {
+        color: $color-primary;
+        text-decoration: underline;
+      }
+
+      .list-disc {
+        list-style-type: disc;
+        padding-inline-start: 1.5rem;
+      }
+    }
+
+    .qr-code {
+      pointer-events: none;
+      display: inline-flex;
+      padding: 0.5rem;
+      margin: 1rem 0 0;
+      border-radius: $border-radius-small;
+      border: 1px solid $color-dark-2;
+    }
+  }
+}

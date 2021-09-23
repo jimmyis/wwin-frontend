@@ -1,0 +1,70 @@
+.ui--asset-offer {
+  position: relative;
+
+  &-header {
+    margin: 0 0 0.5rem;
+
+    .h2 {
+      font-size: $font-size-larger;
+      font-weight: $font-weight-bold;
+    }
+  }
+
+  &-body {
+    border-radius: $border-radius-medium;
+    border: 1px solid $color-dark-2;
+
+    .currency {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+
+      .icon {
+        width: 20px;
+        height: 20px;
+        object-fit: contain;
+        object-position: center;
+      }
+
+      .text {
+        margin-left: 0.25rem;
+        font-size: $font-size-large;
+        font-weight: $font-weight-bold;
+
+        small {
+          font-weight: $font-weight-regular;
+        }
+      }
+    }
+
+    .router-link {
+      color: $color-primary;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .ant {
+    &-table {
+      background-color: transparent;
+
+      &-thead > tr > th {
+        background-color: transparent;
+      }
+
+      &-tbody > tr {
+        &:last-child {
+          & > td {
+            border-bottom: unset;
+          }
+        }
+      }
+    }
+
+    &-pagination {
+      margin: 1rem;
+    }
+  }
+}

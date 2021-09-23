@@ -1,0 +1,25 @@
+.ui--asset-collection {
+  position: relative;
+  margin: 4rem auto 0;
+  max-width: $screen-lg;
+
+  &-header {
+    .h2 {
+      font-size: $font-size-larger + 2;
+      font-weight: $font-weight-bold;
+    }
+
+    .h4 {
+      color: $color-dark-6;
+      font-size: $font-size-large;
+    }
+  }
+
+  &-body {
+    display: grid;
+    grid-gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    grid-auto-flow: dense;
+    margin: 1rem 0 0;
+  }
+}

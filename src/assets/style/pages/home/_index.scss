@@ -1,0 +1,55 @@
+@import './components/hero', './components/latest';
+
+.ui--home {
+  padding: 0 !important;
+
+  .section {
+    max-width: $screen-lg;
+    margin: 0 auto;
+    padding: 6rem 0;
+
+    &:last-child {
+      padding: 5rem 0 2rem;
+    }
+  }
+
+  &-section {
+    &-header {
+      position: relative;
+      display: grid;
+      grid-gap: 2rem;
+      grid-template-columns: 1fr auto;
+      margin: 0 0 2.5rem;
+
+      .title {
+        .h2 {
+          color: $color-hunt-1;
+          font-size: $font-size-larger * 1.25;
+          font-weight: $font-weight-bolder;
+        }
+
+        .desc {
+          color: $color-dark-6;
+          font-size: $font-size-large;
+          font-weight: $font-weight-light;
+        }
+      }
+
+      .action {
+        align-self: flex-end;
+
+        .btn {
+          &-view {
+            height: 30px;
+            padding: 0 1.5rem;
+
+            .text {
+              font-weight: $font-weight-regular;
+              text-transform: capitalize;
+            }
+          }
+        }
+      }
+    }
+  }
+}

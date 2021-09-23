@@ -1,0 +1,118 @@
+.ui--profile {
+  &-user {
+    .user {
+      &-avatar {
+        position: relative;
+        width: 128px;
+        height: 128px;
+        margin: 0 auto 1rem;
+        overflow: hidden;
+        border-radius: 100%;
+        box-shadow: 0 0 0 5px white, 0 10px 20px rgba($color-dark-6, 0.2);
+
+        &:hover {
+          .overlay {
+            display: block;
+          }
+        }
+
+        input {
+          display: none;
+        }
+
+        .image {
+          display: block;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: center;
+          background-color: $color-dark-4;
+        }
+
+        .overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          display: none;
+          cursor: pointer;
+          text-align: center;
+          padding: 3rem 0 0;
+          color: white;
+          background-color: rgba($color-dark-6, 0.5);
+
+          .icon {
+            line-height: 1;
+            font-size: $font-size-large + 2;
+          }
+
+          .text {
+            display: block;
+            font-size: $font-size-large;
+            font-weight: $font-weight-bold;
+            text-transform: uppercase;
+          }
+        }
+      }
+
+      &-name {
+        font-size: $font-size-larger * 1.25;
+        font-weight: $font-weight-bold;
+        text-transform: capitalize;
+        text-align: center;
+      }
+
+      &-address {
+        text-align: center;
+        color: $color-dark-6;
+      }
+
+      &-email {
+        text-align: center;
+        color: $color-dark-6;
+        margin: 0.25rem 0 0;
+      }
+
+      &-bio {
+        margin: 0.75rem 0 0;
+        color: $color-dark-6;
+        font-weight: $font-weight-light;
+      }
+
+      &-link {
+        display: grid;
+        grid-gap: 0.5rem;
+        grid-auto-flow: column;
+        justify-content: center;
+        margin: 1rem 0 0;
+
+        .link {
+          width: 40px;
+          height: 40px;
+        }
+
+        .icon {
+          font-size: $font-size-large;
+        }
+      }
+
+      &-action {
+        display: grid;
+        grid-gap: 0.5rem;
+        margin: 2rem 0 0;
+
+        .btn {
+          height: 38px;
+          padding: 0 2rem;
+
+          .text {
+            margin-left: 0.5rem;
+            font-weight: $font-weight-regular;
+            text-transform: capitalize;
+          }
+        }
+      }
+    }
+  }
+}

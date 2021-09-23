@@ -1,0 +1,122 @@
+.ui--dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 256;
+  padding: 4rem;
+  overflow: hidden auto;
+  background-color: rgba($color-dark, 0.6);
+
+  &.enter,
+  &.exit-active {
+    @include class-endWith('-container') {
+      opacity: 0;
+      transform: translate(0, -4px);
+    }
+  }
+
+  &.enter-active {
+    @include class-endWith('-container') {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+  }
+
+  &-container {
+    position: relative;
+    max-width: 440px;
+    margin: 0 auto;
+    border-radius: 4px;
+    background-color: white;
+    box-shadow: 0 10px 20px rgba($color-dark, 0.1);
+    transition: all $transition-time $cubic-bezier;
+  }
+
+  &-header {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    padding: 1.25rem 1.5rem 1rem;
+    border-bottom: 1px solid $color-dark-2;
+
+    .title {
+      line-height: 20px;
+      color: $color-dark;
+      font-weight: $font-weight-bolder;
+      user-select: none;
+    }
+
+    .btn {
+      &-close {
+        padding: 0;
+        width: 20px;
+        height: 20px;
+        font-size: $font-size-large;
+        color: $color-dark-6;
+        background-color: transparent;
+        justify-content: center;
+
+        &:hover {
+          color: white;
+          background-color: $color-hunt-3;
+        }
+
+        .icon {
+          display: block;
+        }
+      }
+    }
+  }
+
+  &-body {
+    position: relative;
+    padding: 1.5rem;
+    color: $color-dark-6;
+    line-height: $line-height;
+
+    small {
+      display: block;
+      margin: 0.75rem 0 0;
+      color: $color-dark-4;
+      font-size: $font-size-small;
+    }
+
+    & > div {
+      display: grid;
+      grid-gap: 1rem;
+      grid-auto-flow: column;
+      justify-content: space-between;
+    }
+  }
+
+  &-footer {
+    display: grid;
+    grid-gap: 1rem;
+    grid-auto-flow: column;
+    justify-content: flex-end;
+    padding: 0 1.5rem 1.5rem;
+
+    .btn {
+      width: auto;
+      height: 32px;
+      min-width: 88px;
+      text-transform: capitalize;
+
+      &-cancel {
+        font-size: $font-size-small - 1;
+        font-weight: $font-weight-bold;
+        color: $color-dark-6;
+        background-color: tint($color-dark-2, 50%);
+      }
+
+      &-confirm {
+        font-size: $font-size-small;
+        font-weight: $font-weight-bold;
+        background-color: $color-primary;
+      }
+    }
+  }
+}

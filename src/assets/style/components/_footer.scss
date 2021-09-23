@@ -1,0 +1,210 @@
+.ui--footer {
+  position: relative;
+  margin: 4rem 0 0;
+  background-color: $color-dark-2;
+
+  &-follow {
+    display: grid;
+    grid-gap: 6rem;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: flex-end;
+    max-width: $screen-lg;
+    margin: 0 auto;
+    padding: 6rem 2rem;
+
+    @include screen-sm {
+      grid-gap: 3rem;
+      grid-template-columns: unset;
+      padding: 4rem 2rem;
+    }
+
+    &-info {
+      .h4 {
+        color: $color-dark-8;
+        font-size: $font-size-larger;
+        font-weight: $font-weight-bold;
+        margin: 0 0 0.55rem;
+      }
+
+      .desc {
+        color: $color-dark-6;
+        font-weight: $font-weight-regular;
+      }
+    }
+
+    &-content {
+      margin: 1.5rem 0 0;
+
+      .form {
+        display: grid;
+        grid-gap: 1rem;
+        grid-template-columns: 1fr auto;
+        margin-right: 2rem;
+
+        input {
+          height: 40px;
+          padding: 0 1rem;
+          border-radius: $border-radius-small;
+          background-color: white;
+          border: 1px solid $color-dark-2;
+
+          &:hover {
+            border-color: tint($color-indigo, 30%);
+          }
+
+          &:focus {
+            border-color: tint($color-indigo, 30%);
+            box-shadow: 0 0 0 3px rgba($color-indigo, 0.12);
+          }
+
+          &::placeholder {
+            color: $color-dark-4;
+          }
+        }
+
+        .btn {
+          padding: 0 2rem;
+        }
+      }
+
+      .list {
+        display: grid;
+        grid-gap: 0.5rem;
+        grid-auto-flow: column;
+        justify-content: flex-start;
+      }
+
+      .btn {
+        &-link {
+          width: 40px;
+          height: 40px;
+          color: $color-primary !important;
+          background-color: white;
+
+          &:hover {
+            box-shadow: 0 0 0 3px rgba(white, 0.25);
+          }
+
+          .icon {
+            font-size: $font-size-larger;
+          }
+
+          .image {
+            width: 22px;
+            height: 22px;
+            object-fit: contain;
+          }
+        }
+      }
+    }
+  }
+
+  &-container {
+    padding: 0 2rem;
+    background-color: $color-dark-6;
+  }
+
+  &-content {
+    display: grid;
+    grid-gap: 10rem;
+    grid-template-columns: 275px 1fr;
+    max-width: $screen-lg;
+    margin: 0 auto;
+    padding: 4rem 0;
+
+    @include screen-sm {
+      grid-gap: 3rem;
+      grid-template-columns: unset;
+    }
+
+    .meta {
+      &-logo {
+        display: grid;
+        height: 80px;
+        margin: 0 0 2rem;
+      }
+
+      &-desc {
+        color: $color-dark-2;
+        font-weight: $font-weight-light;
+      }
+    }
+
+    .menu {
+      display: grid;
+      grid-gap: 2rem;
+      grid-auto-flow: column;
+      color: $color-dark-2;
+
+      @include screen-xs {
+        grid-auto-flow: row;
+      }
+
+      .h4 {
+        color: white;
+        font-size: $font-size-large;
+        font-weight: $font-weight-bold;
+        text-transform: capitalize;
+
+        &.mt-2 {
+          margin: 2rem 0 0;
+        }
+      }
+
+      .router-link {
+        margin: 0.75rem 0 0;
+        color: $color-dark-2;
+        font-weight: $font-weight-light;
+        text-transform: capitalize;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    .columns {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  &-copyright {
+    display: grid;
+    grid-gap: 4rem;
+    grid-template-columns: 1fr auto;
+    border-top: 1px solid rgba(white, 0.1);
+    padding: 2rem 0 4rem;
+
+    @include screen-xs {
+      grid-gap: 1rem;
+      grid-template-columns: unset;
+      text-align: center;
+    }
+
+    .desc {
+      color: $color-dark-2;
+      font-size: $font-size-small;
+      font-weight: $font-weight-light;
+      letter-spacing: 0.5px;
+    }
+
+    .ul {
+      display: grid;
+      grid-gap: 1.5rem;
+      grid-auto-flow: column;
+
+      @include screen-xs {
+        justify-content: center;
+      }
+
+      a {
+        color: $color-dark-2;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}

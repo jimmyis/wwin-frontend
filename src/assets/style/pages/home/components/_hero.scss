@@ -1,0 +1,70 @@
+.ui--home-hero {
+  position: relative;
+  display: grid;
+  height: 600px;
+  background-image: url('/static/images/cover.jpg');
+  background-position: top center;
+  background-size: cover;
+
+  @include screen-sm {
+    height: 480px;
+  }
+
+  &-content {
+    align-self: center;
+    margin: 0 auto;
+    max-width: $screen-lg;
+    text-align: center;
+
+    .coin {
+      display: block;
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 2rem;
+      object-fit: contain;
+      object-position: center;
+      pointer-events: none;
+
+      @include screen-xs {
+        width: 100px;
+        height: 100px;
+      }
+    }
+
+    .h2,
+    .h1 {
+      font-family: 'PT Serif', serif;
+    }
+
+    .h2 {
+      color: #a58231;
+      line-height: 1;
+      font-size: $font-size-larger * 2;
+      font-weight: $font-weight-light;
+
+      @include screen-xs {
+        font-size: $font-size-larger * 1.5;
+      }
+    }
+
+    .h1 {
+      color: white;
+      letter-spacing: 1px;
+      font-size: $font-size-larger * 2.25;
+
+      @include screen-xs {
+        font-size: $font-size-larger * 1.5;
+      }
+    }
+
+    .h4 {
+      letter-spacing: 1px;
+      color: $color-dark-4;
+      font-size: $font-size-large + 2;
+
+      @include screen-xs {
+        font-size: $font-size-large;
+      }
+    }
+  }
+}

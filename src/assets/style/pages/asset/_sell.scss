@@ -1,0 +1,159 @@
+.ui--asset-sell {
+  position: relative;
+  display: grid;
+  grid-gap: 5rem;
+  grid-template-columns: 1fr 275px;
+  align-items: flex-start;
+  margin: 0 auto 2rem;
+  max-width: $screen-md;
+
+  &-form {
+    display: grid;
+    grid-gap: 2rem;
+
+    .method {
+      display: grid;
+      grid-gap: 1.5rem;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-auto-flow: dense;
+      margin: 1rem 0 0;
+
+      .li {
+        &-label {
+          display: block;
+          cursor: pointer;
+          padding: 0.5rem 2rem;
+          border-radius: $border-radius-medium;
+          border: 1px solid $color-dark-2;
+          text-align: center;
+
+          .text {
+            display: block;
+            font-size: $font-size-large;
+            font-weight: $font-weight-bold;
+          }
+
+          .desc {
+            display: block;
+            line-height: 1.25;
+            color: $color-dark-4;
+            font-weight: $font-weight-light;
+            margin: 0.25rem 0 0;
+          }
+        }
+
+        &-input {
+          display: none;
+
+          &:checked ~ {
+            label {
+              border: 1px solid tint($color-indigo, 30%);
+              box-shadow: 0 0 0 3px rgba($color-indigo, 0.12);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &-summary {
+    padding: 2rem;
+    border-radius: $border-radius-medium;
+    border: 1px solid $color-dark-2;
+
+    &-title {
+      display: flex;
+      align-items: center;
+      padding: 0 0 0.75rem;
+      border-bottom: 1px solid $color-dark-2;
+
+      .icon {
+        margin-right: 1rem;
+        color: $color-dark-6;
+        font-size: $font-size-larger;
+      }
+
+      .text {
+        text-transform: capitalize;
+        line-height: 1;
+        font-size: $font-size-large;
+        font-weight: $font-weight-bold;
+      }
+    }
+
+    &-info {
+      padding: 2rem 0;
+
+      .label {
+        text-transform: capitalize;
+        color: $color-dark-6;
+        font-size: $font-size-large;
+        font-weight: $font-weight-light;
+      }
+
+      .currency {
+        display: flex;
+        align-items: center;
+        margin: 0 0 1rem;
+
+        .icon {
+          width: 18px;
+          height: 28px;
+          object-fit: contain;
+          margin-right: 0.75rem;
+        }
+
+        .text {
+          font-size: $font-size-larger + 4;
+          font-weight: $font-weight-bold;
+        }
+      }
+
+      .btn {
+        &-post {
+          width: 100%;
+          height: 40px;
+          padding: 0 1rem;
+        }
+      }
+    }
+
+    &-fee {
+      padding: 0.75rem 0 0;
+      border-top: 1px solid $color-dark-2;
+
+      .label {
+        text-transform: capitalize;
+        font-size: $font-size-large;
+        font-weight: $font-weight-bold;
+      }
+
+      .desc {
+        color: $color-dark-6;
+        line-height: 1.3;
+        padding: 1rem 0;
+      }
+
+      .ul {
+        display: grid;
+        grid-gap: 0.5rem;
+        padding: 0.5rem 0;
+        border-top: 1px dashed $color-dark-2;
+
+        .li {
+          display: flex;
+          justify-content: space-between;
+          line-height: 24px;
+        }
+
+        .text {
+          color: $color-dark-6;
+        }
+
+        .value {
+          font-weight: $font-weight-bold;
+        }
+      }
+    }
+  }
+}

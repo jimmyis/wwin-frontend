@@ -1,0 +1,36 @@
+/**
+  =========================================================
+  * This website is produced by NiVAR
+  * e-mail: info@nivar.com
+  * website: nivar.com
+  =========================================================
+  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+**/
+
+@import
+  // Core Styles
+  'core/variable',
+  'core/mixin',
+  'core/reset',
+  'core/global',
+
+  // Components Styles
+  'components/article',
+  'components/button',
+  'components/collapse',
+  'components/collect',
+  'components/connect',
+  'components/dialog',
+  'components/footer',
+  'components/input',
+  'components/loader',
+  'components/modal',
+  'components/navbar',
+  
+  // Pages Styles
+  'pages/home/index',
+  'pages/asset/index',
+  'pages/profile/index',
+  'pages/collection/index',
+  'pages/marketplace/index';
+  
