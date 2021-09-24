@@ -197,7 +197,7 @@ export default function CreateAssetContainer() {
               { label: 'BNB', value: 'bnb' },
               { label: 'BUSD', value: 'busd' },
               { label: 'BATH', value: 'bath' },
-              { label: 'wWin', value: 'wwin' }
+              { label: 'Wwin', value: 'wwin' }
             ].filter(({ value }) => (isProduction ? value !== 'bath' : true))}
           />
 

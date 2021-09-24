@@ -1,8 +1,6 @@
 import { wwinContract } from '@/contracts/wwin.contract'
 import { marketContract } from '@/contracts/market.contract'
-import { swapContract } from '@/contracts/swap.contract'
 import { getEtherProvider, getSignature } from '@/libs/web3'
-import { BigNumber } from '@ethersproject/bignumber'
 
 export const demoService = {
   /**
@@ -46,15 +44,6 @@ export const demoService = {
       })
 
       console.log(res)
-    }
-  },
-
-  async swapNFT(address: string, amount: BigNumber, nftAddress: string, rng: BigNumber): Promise<any> {
-    try {
-      const { methods } = swapContract.build()
-      return await methods.swapNFT(address, amount, nftAddress, rng).call()
-    } catch (error) {
-      return error
     }
   }
 }

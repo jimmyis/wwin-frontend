@@ -160,7 +160,7 @@ export function EditProfileModal({ user }: Props) {
         label='email address'
         register={register}
         errors={errors.email}
-        rules={{ pattern: emailValidator() }}
+        rules={{ required: true, pattern: emailValidator() }}
       />
 
       <Input.Textarea key='.bio' name='bio' label='bio' register={register} />

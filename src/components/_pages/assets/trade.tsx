@@ -11,7 +11,6 @@ import { dialog, loader, getRandom, getShortAddress, upperCase, lowerCase } from
 import { NFTItem } from '@/types'
 import { Connectors } from '@/types/constants'
 import { notification as notice } from 'antd'
-import { demoService } from '@/services/demo.service'
 
 export function TradeComponent({ data }: { data: NFTItem }) {
   // __STATE <React.Hooks>
@@ -22,7 +21,7 @@ export function TradeComponent({ data }: { data: NFTItem }) {
   useEffect(() => {
     if (!account) {
       const connector: Connectors = getCookie(configs.CONNECTOR)
-      signin(connector)
+      if (connector) signin(connector)
     }
   }, [account, signin])
 
@@ -37,12 +36,6 @@ export function TradeComponent({ data }: { data: NFTItem }) {
       modal(<ModalChackout item={data} account={account} />)
     }
   }, [account, data])
-
-  const handleClaim = () => {
-    console.log('handleClaim')
-    // demoService.swapNFT()
-
-  }
 
   // __RENDER
   return (
@@ -66,30 +59,26 @@ export function TradeComponent({ data }: { data: NFTItem }) {
         </div>
       </div>
 
-      <div className='actions'>
-        <div className='label'>Current price</div>
-        <CurrencyComponent currency={data.currency} amount={data.price} size='large'>
-          <small className='unit'>{data.currency}</small>
-        </CurrencyComponent>
+      {data.owner !== account && (
+        <div className='actions'>
+          <div className='label'>Current price</div>
+          <CurrencyComponent currency={data.currency} amount={data.price} size='large'>
+            <small className='unit'>{data.currency}</small>
+          </CurrencyComponent>
 
-        {account ? (
-          <button className='btn btn-dark btn-shop' disabled={!data.available} onClick={handleShop}>
-            <span className='icon bi bi-basket2'></span>
-            <span className='text'>{!data?.available ? 'out of stock' : 'buy now'}</span>
-          </button>
-        ) : (
-          <button className='btn btn-dark btn-connect' onClick={handleSignin}>
-            <span className='icon bi bi-wallet2'></span>
-            <span className='text'>Connect Wallet</span>
-          </button>
-        )}
-
-        <button className='btn btn-dark btn-connect' onClick={handleClaim}>
-          <span className='icon bi bi-bag'></span>
-          <span className='text'>Claim Now</span>
-        </button>
-
-      </div>
+          {account ? (
+            <button className='btn btn-dark btn-shop' disabled={!data.available} onClick={handleShop}>
+              <span className='icon bi bi-basket2'></span>
+              <span className='text'>{!data?.available ? 'out of stock' : 'buy now'}</span>
+            </button>
+          ) : (
+            <button className='btn btn-dark btn-connect' onClick={handleSignin}>
+              <span className='icon bi bi-wallet2'></span>
+              <span className='text'>Connect Wallet</span>
+            </button>
+          )}
+        </div>
+      )}
     </div>
   )
 }

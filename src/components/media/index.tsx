@@ -23,10 +23,12 @@ export function MediaComponent({ media, autoPlay }: Props) {
     async function run(): Promise<void> {
       const blob = await getMediaBlob(media)
       setState(blob)
-      aspectRatioFit()
     }
 
-    if (media) run()
+    if (media) {
+      run()
+      aspectRatioFit()
+    }
   }, [media])
 
   useEffect(() => {

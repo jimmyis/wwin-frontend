@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { Asset, Loading, MediaComponent } from '@/components'
-import { chian } from '@/libs/configs'
+import { chian, isDevelop } from '@/libs/configs'
 import { assetService } from '@/services/assets.service'
 import { getQueryAt, getShortAddress, loader } from '@/utils'
 import { NFTItem } from '@/types'
@@ -32,7 +32,7 @@ export default function AssetsContainer() {
         setState({
           ...res,
           id: res.id || res.tokenAddress,
-          tokenId: res.tonkenId,
+          tokenId: res.tokenId || res.tonkenId,
           price: res.price || 0,
           available: res.available || 0,
           totalSupply: res.totalSupply || 1
@@ -56,9 +56,11 @@ export default function AssetsContainer() {
         <div className='ui--assets-columns'>
           <div className='ui--assets-header'>
             <h1 className='name'>{state.name}</h1>
-            <a className='btn btn-default collection'>
-              <span className='text'>Untitled Collection</span>
-            </a>
+            {isDevelop && (
+              <a className='btn btn-default collection'>
+                <span className='text'>Untitled Collection</span>
+              </a>
+            )}
           </div>
 
           <Asset.Trade data={state} />
