@@ -48,15 +48,19 @@ export function TradeComponent({ data }: { data: NFTItem }) {
           </a>
         </div>
 
-        <div className='columns available'>
-          <span className='icon bi bi-basket2'></span>
-          <span className='text'>{data.available || 0} Available</span>
-        </div>
+        {data.owner !== account && (
+          <>
+            <div className='columns available'>
+              <span className='icon bi bi-basket2'></span>
+              <span className='text'>{data.available || 0} Available</span>
+            </div>
 
-        <div className='columns supply'>
-          <span className='icon bi bi-archive'></span>
-          <span className='text'>{data.totalSupply || 0} Total Supply</span>
-        </div>
+            <div className='columns supply'>
+              <span className='icon bi bi-archive'></span>
+              <span className='text'>{data.totalSupply || 0} Total Supply</span>
+            </div>
+          </>
+        )}
       </div>
 
       {data.owner !== account && (
