@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "default": "wwin-mainnet"
+  },
+  "targets": {
+    "wwin-mainnet": {
+      "hosting": {
+        "marketplace": [
+          "wwin-marketplace"
+        ],
+        "marketplace-dev": [
+          "wwin-marketplace-dev"
+        ]
+      }
+    }
+  }
+}
