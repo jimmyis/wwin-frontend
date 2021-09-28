@@ -1,34 +1,48 @@
 import { useState, useEffect } from 'react'
 import { ArticleComponent, Loading } from '@/components'
 import { useQueryString } from '@/hooks'
-import { assetService } from '@/services/assets.service'
+// import { assetService } from '@/services/assets.service'
 import { Pagination } from 'antd'
+
+import { db } from '@/libs/firebase'
+import { collection, getDocs } from "firebase/firestore";
 
 export default function MarketplaceContainer() {
   // __STATE <React.Hooks>
   const [records, setRecords] = useState<any[]>()
-  const [query, setQuery] = useQueryString()
-  const [page, setPage] = useState<any>({
+  const [/* query */, setQuery] = useQueryString()
+  const [page, /* setPage */] = useState<any>({
     currentPage: 1,
     totalItems: 1
   })
 
   // __EFFECTS <React.Hooks>
-  useEffect(() => {
-    async function run() {
-      setRecords([])
-      const res = await assetService.getAll({ page: 1, limit: 20, ...query })
-      if (res) {
-        setRecords(res.data)
-        setPage({
-          currentPage: res.currentPage,
-          totalItems: res.totalItems
-        })
-      }
-    }
+  // useEffect(() => {
+  //   async function run() {
+  //     setRecords([])
+  //     const res = await assetService.getAll({ page: 1, limit: 20, ...query })
+  //     if (res) {
+  //       setRecords(res.data)
+  //       setPage({
+  //         currentPage: res.currentPage,
+  //         totalItems: res.totalItems
+  //       })
+  //     }
+  //   }
 
-    run()
-  }, [query])
+  //   run()
+  // }, [query])
+  useEffect(() => {
+    (async () => {
+      const records_: any[] = []
+      const querySnapshot = await getDocs(collection(db, "nft_collections"));
+      querySnapshot.forEach((doc) => {
+        const data = doc.data()
+        records_?.push(data)
+      });
+      setRecords(records_)
+    })()
+  })
 
   // __FUNCTIONS
   // const handleFilter = (value: { [propName: string]: any }) => {
