@@ -103,7 +103,7 @@ export function clone(input: any) {
  * @param {string} input
  */
 export function upperCase(input: string): string {
-  return input.toLocaleUpperCase()
+  return input?.toLocaleUpperCase()
 }
 
 /**
@@ -112,7 +112,7 @@ export function upperCase(input: string): string {
  * @param {string} input
  */
 export function lowerCase(input: string): string {
-  return input.toLocaleLowerCase()
+  return input?.toLocaleLowerCase()
 }
 
 /**
