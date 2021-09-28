@@ -45,23 +45,23 @@ export function NavbarComponent() {
             <span className='text'>marketplace</span>
           </RouterLink>
 
-          <a
+          {/* <a
             className='router-link'
             href='https://stake.winwinwintoken.com/garuda-white-gold'
             target='_parent'
             referrerPolicy='no-referrer'
           >
             <span className='text'>stake</span>
-          </a>
+          </a> */}
 
-          <a
+          {/* <a
             className='router-link'
             href='https://testnet-bath-wwin.web.app'
             target='_parent'
             referrerPolicy='no-referrer'
           >
             <span className='text'>bath</span>
-          </a>
+          </a> */}
 
           <a className='router-link' href='/static/WWIN_Whitepaper.pdf' target='_blank' referrerPolicy='strict-origin'>
             <span className='text'>whitepaper</span>
