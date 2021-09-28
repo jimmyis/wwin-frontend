@@ -1,10 +1,10 @@
 import { ethers } from 'ethers'
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { BscConnector } from '@binance-chain/bsc-connector'
-import { chian } from '@/libs/configs'
+import { chain } from '@/libs/configs'
 import { Connectors } from '@/types/constants'
 
-const supportedChainIds = [chian.chianId]
+const supportedChainIds = [chain.chainId]
 
 export const injected = new InjectedConnector({ supportedChainIds })
 export const bsc = new BscConnector({ supportedChainIds })

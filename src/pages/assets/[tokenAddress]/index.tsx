@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { Asset, Loading, MediaComponent } from '@/components'
-import { chian } from '@/libs/configs'
 import { assetService } from '@/services/assets.service'
 import { getQueryAt, getShortAddress, loader } from '@/utils'
 import { NFTItem } from '@/types'
@@ -88,7 +87,7 @@ export default function AssetsContainer() {
               <div className='li'>
                 <span className='label'>Contract Address</span>
                 <span className='value'>
-                  <a className='btn btn-default' href={`${chian.explorer}/address/${state.id}`} target='_blank'>
+                  <a className='btn btn-default' href={`${chain.explorer}/address/${state.id}`} target='_blank'>
                     {getShortAddress(state.id)}
                   </a>
                 </span>

@@ -32,14 +32,14 @@ export const isBrowser: boolean = configs.APP_CLIENT_SIDE || typeof window !== '
 export const isDevelop: boolean = configs.APP_MODE === 'development'
 export const isProduction: boolean = configs.APP_MODE === 'production'
 
-export const chian = {
+export const chain = {
   56: {
-    chianId: 56,
+    chainId: 56,
     network: 'mainnet',
     explorer: 'https://bscscan.com'
   },
   97: {
-    chianId: 97,
+    chainId: 97,
     network: 'testnet',
     explorer: 'https://testnet.bscscan.com'
   }

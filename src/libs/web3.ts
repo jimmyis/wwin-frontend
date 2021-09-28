@@ -4,7 +4,7 @@ import { Eth } from 'web3-eth'
 import { Contract } from 'web3-eth-contract'
 import { AbiItem } from 'web3-utils'
 import { parseUnits } from 'ethers/lib/utils'
-import { chian, tokens, isBrowser } from '@/libs/configs'
+import { chain, tokens, isBrowser } from '@/libs/configs'
 import { rpcs } from '@/store/state'
 import { dialog, upperCase } from '@/utils'
 
@@ -60,7 +60,7 @@ export function getEtherProvider(): Eth | void {
 }
 
 export function getRpcUrl(): string {
-  const rpc = (rpcs as any)[chian.network]
+  const rpc = (rpcs as any)[chain.network]
   const idx = Math.floor(Math.random() * rpc.length)
   return rpc[idx]
 }
@@ -71,7 +71,7 @@ export function getToken(symbol: string) {
   if (!token) return void 0
   return {
     ...token,
-    address: (token.address as any)[chian.chianId]
+    address: (token.address as any)[chain.chainId]
   }
 }
 
