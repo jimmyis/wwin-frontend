@@ -32,6 +32,7 @@ export interface NFTItem {
   available: number
   totalSupply: number
   properties: NFTProperty[]
+  is_presale: bool
 }
 
 export interface NFTProperty {
