@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { Input, MediaComponent, CurrencyComponent } from '@/components'
 import { useBEP20Contract, marketContract } from '@/contracts'
 import { useAuth, useModal } from '@/hooks'
-import { configs, chian } from '@/libs/configs'
+import { configs, chain } from '@/libs/configs'
 import { getCookie } from '@/libs/cookies'
 import { getEtherProvider, bigNumber, toUint256 } from '@/libs/web3'
 import { assetService } from '@/services/assets.service'
@@ -11,37 +11,379 @@ import { dialog, loader, getRandom, getShortAddress, upperCase, lowerCase } from
 import { NFTItem } from '@/types'
 import { Connectors } from '@/types/constants'
 import { notification as notice } from 'antd'
-import { demoService } from '@/services/demo.service'
+// import { demoService } from '@/services/demo.service'
+import { ethers, Contract } from "ethers"
+
+function createContractInstance(_contract: { name?: string, symbol?: string, address: string, abi: any }) {
+  const contract = ({ 
+    ..._contract, 
+    contract: null, 
+    error: process.browser ? null : "Only supported on browser context"
+  } as any);
+
+  if (process.browser) {
+    if (!window.ethereum) { contract.error = "Web3 ethereum object not existed" }
+    else {
+      const { address, abi } = _contract
+      const provider = new ethers.providers.Web3Provider(window.ethereum)
+      provider.send("eth_requestAccounts", []).then((/* x: any */) => {
+        const signer = provider.getSigner();
+        contract.contract = new Contract(address, abi, signer);
+      })
+    }
+
+  }
+  return contract
+}
+
+const ERC20 = {
+  abi: [{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"burner","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Burn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"minter","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Mint","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"constant":true,"inputs":[{"internalType":"address","name":"_owner","type":"address"},{"internalType":"address","name":"_spender","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"_spender","type":"address"},{"internalType":"uint256","name":"_value","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"_who","type":"address"},{"internalType":"uint256","name":"_value","type":"uint256"}],"name":"burn","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"_to","type":"address"},{"internalType":"uint256","name":"_value","type":"uint256"}],"name":"mint","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"_to","type":"address"},{"internalType":"uint256","name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"_from","type":"address"},{"internalType":"address","name":"_to","type":"address"},{"internalType":"uint256","name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"}]
+}
+
+const ERC721 = {
+  abi: [{"inputs":[{"internalType":"string","name":"_name","type":"string"},{"internalType":"string","name":"_symbol","type":"string"},{"internalType":"string","name":"_description","type":"string"},{"internalType":"uint256","name":"_maxSupply","type":"uint256"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"approved","type":"address"},{"indexed":true,"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"operator","type":"address"},{"indexed":false,"internalType":"bool","name":"approved","type":"bool"}],"name":"ApprovalForAll","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"userAddress","type":"address"},{"indexed":false,"internalType":"address payable","name":"relayerAddress","type":"address"},{"indexed":false,"internalType":"bytes","name":"functionSignature","type":"bytes"}],"name":"MetaTransactionExecuted","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":true,"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"Transfer","type":"event"},{"inputs":[],"name":"ERC712_VERSION","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"approve","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"baseQrURL","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"baseTokenURI","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"description","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"userAddress","type":"address"},{"internalType":"bytes","name":"functionSignature","type":"bytes"},{"internalType":"bytes32","name":"sigR","type":"bytes32"},{"internalType":"bytes32","name":"sigS","type":"bytes32"},{"internalType":"uint8","name":"sigV","type":"uint8"}],"name":"executeMetaTransaction","outputs":[{"internalType":"bytes","name":"","type":"bytes"}],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"getApproved","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getChainId","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getDomainSeperator","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"getNonce","outputs":[{"internalType":"uint256","name":"nonce","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"operator","type":"address"}],"name":"isApprovedForAll","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"maxSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_to","type":"address"}],"name":"mintTo","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"ownerOf","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_tokenId","type":"uint256"}],"name":"qrURL","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"safeTransferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"},{"internalType":"bytes","name":"_data","type":"bytes"}],"name":"safeTransferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"operator","type":"address"},{"internalType":"bool","name":"approved","type":"bool"}],"name":"setApprovalForAll","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"_url","type":"string"}],"name":"setBaseQrURL","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"_uri","type":"string"}],"name":"setBaseTokenURI","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes4","name":"interfaceId","type":"bytes4"}],"name":"supportsInterface","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"index","type":"uint256"}],"name":"tokenByIndex","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"uint256","name":"index","type":"uint256"}],"name":"tokenOfOwnerByIndex","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_tokenId","type":"uint256"}],"name":"tokenURI","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"transferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"}]
+}
+
+interface ContractConfig {
+  name: string;
+  symbol?: string;
+  address: { [chainId: string]: string }
+}
+
+function getERC20tokenContract(contract_config: ContractConfig, chainId: string | number) {
+  console.log("getERC20tokenContract", contract_config)
+  const { name, symbol, address: _address } = contract_config
+  const address = _address[chainIdMatcher(chainId)]
+  const abi = ERC20.abi
+  return createContractInstance({ name, symbol, address, abi })
+}
+
+function chainIdMatcher(chainId: string | number) {
+  return chainId.toString()
+}
+
+function getNFTregistryContract() {
+  const name = "NFT Registry"
+  // const address = "0x262451c4BFf59747BbCFEb03c5490611BF9Ba635" // Testnet Old
+  const address = "0x7cA07b1BBE7E78949C3efeeb23f3429e4d3fA3cf" // Mainnet Current
+  const abi = [{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"inputs":[{"internalType":"address","name":"erc20_address","type":"address"}],"name":"getERC20token","outputs":[{"components":[{"internalType":"address","name":"contract_address","type":"address"},{"internalType":"string","name":"symbol","type":"string"},{"internalType":"bool","name":"active","type":"bool"},{"internalType":"string","name":"meta","type":"string"}],"internalType":"struct I_NFT_Registry.ERC20Token","name":"","type":"tuple"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"erc721_address","type":"address"}],"name":"getERC721token","outputs":[{"components":[{"internalType":"address","name":"contract_address","type":"address"},{"internalType":"string","name":"name","type":"string"},{"internalType":"uint256","name":"max_supply","type":"uint256"},{"internalType":"uint256[]","name":"max_supply_history","type":"uint256[]"},{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"payee","type":"address"},{"internalType":"bool","name":"active","type":"bool"},{"internalType":"string","name":"meta","type":"string"}],"internalType":"struct I_NFT_Registry.ERC721Token","name":"","type":"tuple"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"erc721_address","type":"address"},{"internalType":"address","name":"erc20_address","type":"address"}],"name":"getExchangeRateForNFTcollection","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"erc721_address","type":"address"},{"internalType":"uint256","name":"serial_no","type":"uint256"},{"internalType":"address","name":"erc20_address","type":"address"}],"name":"getExchangeRateForSpecificNFT","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"erc20_address","type":"address"}],"name":"getMinimumExchangeRate","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"erc721_address","type":"address"},{"internalType":"uint256","name":"serial_no","type":"uint256"}],"name":"getNFTslotState","outputs":[{"components":[{"internalType":"bool","name":"exists","type":"bool"},{"internalType":"uint256","name":"serial_no","type":"uint256"},{"internalType":"string","name":"status","type":"string"},{"internalType":"uint256","name":"timestamp","type":"uint256"},{"internalType":"string","name":"remark","type":"string"},{"internalType":"string","name":"meta","type":"string"},{"internalType":"address","name":"operator","type":"address"}],"internalType":"struct I_NFT_Registry.SlotState","name":"","type":"tuple"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"}]
+  return createContractInstance({ name, address, abi })
+}
+
+function getNFTswapContract() {
+  const name = "NFT Swap"
+  // const address = "0x262451c4BFf59747BbCFEb03c5490611BF9Ba635" // Testnet Old
+  const address = "0x7327c237367B0d996F2A5197f46fa931Cf850181" // Mainnet Current
+  const abi = [{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"buyer","type":"address"},{"indexed":true,"internalType":"address","name":"erc721_address","type":"address"},{"indexed":false,"internalType":"uint256","name":"serial_no","type":"uint256"},{"indexed":true,"internalType":"address","name":"erc20_address","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"NFTswap","type":"event"},{"inputs":[{"internalType":"address","name":"erc721_address","type":"address"},{"internalType":"uint256","name":"serial_no","type":"uint256"},{"internalType":"address","name":"erc20_address","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"string","name":"remark","type":"string"},{"internalType":"string","name":"meta","type":"string"}],"name":"swapNFT","outputs":[],"stateMutability":"nonpayable","type":"function"}]
+  return createContractInstance({ name, address, abi })
+}
+
+function getNFTContract(contract_config: ContractConfig) {
+  const { name, symbol, address: _address } = contract_config
+  // const address = "0xbac7e7a39ba9ba1ce20755561f48a65bc8c8d42c" // Testnet
+  const address = "0xD1A21D267c5AE768Ef9f75F38b16e03490C49e4e" // Mainnet - White Gold
+  const abi = ERC721.abi
+  return createContractInstance({ name, symbol, address, abi })
+}
+
+const ERC20Tokens = {
+  "WBNB": {
+    name: "WBNB Token",
+    symbol: "WBNB",
+    address: {
+      "56" /* BSC Mainnet */: "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+      "97" /* BSC Testnet */: "0xae13d989dac2f0debff460ac112a837c89baa7cd"
+    }
+  },
+  "CLAIM": {
+    name: "CLAIM Token",
+    symbol: "CLAIM",
+    address: {
+      "56" /* BSC Mainnet */: "0x01c2fa296c98355e86a159860c3f533a6de251f6",
+      "97" /* BSC Testnet */: "0x05D83208DAfFbE075f070B6a3b3B29Be524a8A06"
+    }
+  }
+}
+
+const ERC721Tokens: { [address: string]: any } = {
+  // "0xbac7e7a39ba9ba1ce20755561f48a65bc8c8d42c": {
+  //   name: "SAMPLE",
+  //   symbol: "WWIN-NFT",
+  //   address: "0xbac7e7a39ba9ba1ce20755561f48a65bc8c8d42c", // Owned by ...5FEF
+  //   chainId: "97"
+  // },
+
+  // "0xD1A21D267c5AE768Ef9f75F38b16e03490C49e4e": {
+  //   name: "",
+  //   symbol: "",
+  //   address: "0xD1A21D267c5AE768Ef9f75F38b16e03490C49e4e", // Owned by ...8dc5
+  //   chainId: "97"
+  // },
+
+  "0x8351057b11d48a02d138637c9386a7bce72b0966": {
+    name: "Poramesuan Garuda “Prosperity” Gold Model",
+    symbol: "GOLD",
+    address: "0x8351057b11d48a02d138637c9386a7bce72b0966",
+    chainId: "56"
+  },
+  
+  "0xd1a21d267c5ae768ef9f75f38b16e03490c49e4e": {
+    name: "Poramesuan Garuda “Prosperity” Gold Model",
+    symbol: "WHITE GOLD",
+    address: "0xd1a21d267c5ae768ef9f75f38b16e03490c49e4e",
+    chainId: "56"
+  },
+}
+
+import { db } from '@/libs/firebase'
+import { doc, getDoc } from "firebase/firestore";
+// import { setDoc } from "firebase/firestore";
+
+async function getOneDoc(collection: string, id: string) {
+  const docRef = doc(db, collection, id);
+  const docSnap = await getDoc(docRef);
+  const data = docSnap.data();
+  return data as any
+}
+
+function randomPick(array: any[]) {
+  return array[Math.floor(Math.random() * array.length)];
+}
+
+function shuffle(array: any[]) {
+  let currentIndex = array.length,  randomIndex;
+
+  // While there remain elements to shuffle...
+  while (currentIndex != 0) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+  }
+
+  return array;
+}
+
+const getNFTtokensAvailable = async (id: string) => {
+  const { LIST, /* TESTLIST */ } = await getOneDoc("nft_tokens_list:available", id);
+  
+  const availableList = shuffle([...new Set(LIST)])
+  return availableList
+}
+
+// const setNFTtokenAvailable = async (id: string, from: number, to: number, list: number[]) {
+//   // let list = []
+//   // for (let i = 301; i <= 503; i += 1) {
+//   //   list.push(i)
+//   // }
+//   // try {
+//   //   await setDoc(doc(db, "nft_tokens_list:available", id), {
+//   //     LIST: [...new Set(list)]
+//   //   });
+//   // } catch (e) {
+//   //   console.error("Error adding document: ", e);
+//   // }
+// }
 
 export function TradeComponent({ data }: { data: NFTItem }) {
   // __STATE <React.Hooks>
   const { account, signin } = useAuth()
-  const { onModelActive: modal } = useModal(null, 'checkout')
+  // const { onModelActive: modal } = useModal(null, 'checkout')
+  const [ isClaimingPanelActive, setIsClaimingPanelActive ] = useState(false)
+  // const [ currentCurrency, setCurrentCurrency ] = useState(CLAIMtoken.address)
+  const CLAIMapprovalState = useState(true)
+  const [ isCLAIMApproved, /* setIsApproved */ ] = CLAIMapprovalState
+  
+  const WBNBapprovalState = useState(true)
+  const [ isWBNBapproved, /* setIsApproved */ ] = WBNBapprovalState
 
+  const isClaimableState = useState(false)
+  const [ isClamable, /* setIsClaimable */ ] = isClaimableState
+
+  const [ totalAvailable, setTotalAvailable ] = useState(0)
+
+  const [ ERC20tokens, setERC20tokens ] = useState<{ [symbol: string]: any }>({ address: "" })
+  const [ NFTcontract, setNFTcontract ] = useState<any>({ address: "" })
+  const NFTswap = getNFTswapContract()
+  const NFTregistry = getNFTregistryContract()
+  
   // __EFFECTS <React.Hooks>
   useEffect(() => {
+    const ERC721_address = data.tokenAddress?.toLowerCase()
+    const ERC721_config = ERC721Tokens[ERC721_address]
+    console.log("ERC721 initializing", ERC721_config)
+    if (ERC721_config) {
+      const WBNB = getERC20tokenContract(ERC20Tokens["WBNB"], "56");
+      const CLAIM = getERC20tokenContract(ERC20Tokens["CLAIM"], "56");
+      const NFTcontract_ = getNFTContract(ERC721Tokens[ERC721_address])
+      setNFTcontract(NFTcontract_)
+      setERC20tokens({ ...ERC20Tokens, WBNB, CLAIM })
+    }
+
     if (!account) {
       const connector: Connectors = getCookie(configs.CONNECTOR)
       signin(connector)
+    } else {
+      if (ERC721Tokens[ERC721_address]) {
+        getNFTtokensAvailable(ERC721_address)
+        .then((availableList) => setTotalAvailable(availableList.length))
+      }
     }
-  }, [account, signin])
+    
+  }, [account, signin,])
+
+
+
+  useEffect(() => {
+    if (typeof account === "string") {
+      console.log("Checking Contracts")
+      console.log("Checking Approval", NFTswap)
+      checkERC20Approval(account, "WBNB", NFTswap?.address, WBNBapprovalState).then().catch()
+      checkERC20Approval(account, "CLAIM", NFTswap?.address, CLAIMapprovalState).then().catch()
+      if (ERC20tokens["CLAIM"]) {
+        checkClaimBalance(account, isClaimableState)
+      }
+    }
+
+  }, [account, ERC20tokens["CLAIM"]?.contract, ERC20tokens["WBNB"]?.contract, NFTswap?.contract])
 
   // __FUNCTIONS
   const handleSignin = useCallback(() => {
     signin(Connectors.Injected)
   }, [])
 
-  const handleShop = useCallback(() => {
-    if (!data.available) return void 0
-    if (account) {
-      modal(<ModalChackout item={data} account={account} />)
+  const handleShop = async () => {
+    setIsClaimingPanelActive(!isClaimingPanelActive)
+
+    console.log(data)
+    // Open Popup on Click
+    // Get Random of Available List
+    const availableList = await getNFTtokensAvailable(data.tokenAddress)
+    // Show Random Serial Number
+    let randomNo = randomPick(availableList)
+    // Show Swap Item
+    if (ERC20tokens["WBNB"].contract) {
+      console.log(await ERC20tokens["WBNB"].contract.name())
+      console.log((await ERC20tokens["WBNB"].contract.balanceOf("0x15B0E6d785F3eEdF32B3B8D7Abcb7E6001E18Dc5")).toString())
     }
-  }, [account, data])
 
-  const handleClaim = () => {
-    console.log('handleClaim')
-    // demoService.swapNFT()
+    async function claimNFT(serialNo: number) {
+      // console.log(NFTswap.contract, NFTregistry.contract)
+      // console.log(ethers.providers)
+      // console.log(window.ethereum)
+      if (NFTswap.contract && NFTregistry.contract) {
+        // console.log(await NFTswap.contract.contains(ERC20tokens["WBNB"]?.address))
+        // console.log((await NFTswap.contract.maxSupply(NFTcontract?.address)).toString())
+        const amount = ethers.utils.parseEther(data.price.toString());
+        const slot = await NFTregistry.contract.getNFTslotState(NFTcontract?.address, serialNo)
+        console.log(slot, amount, serialNo)
+        // // console.log(slot, totalSupply, serialNo)
+        const totalSupply = (await NFTcontract?.contract.totalSupply()).toNumber()
 
+        if (!slot.exists && serialNo <= totalSupply) {
+          const tx = await NFTswap.contract.swapNFT(NFTcontract?.address, serialNo, ERC20tokens["WBNB"]?.address, amount, "", "{}")
+          const result = await tx.wait();
+          console.log(NFTswap.error, tx, result);
+        } else {
+          let _randomNo = randomPick(availableList)
+          await claimNFT(_randomNo)
+        }
+      }
+    }
+
+    await claimNFT(randomNo)
+  }
+  // const handleShop = useCallback(() => {
+  //   if (!data.available) return void 0
+  //   if (account) {
+  //     modal(<ModalChackout item={data} account={account} />)
+  //   }
+  // }, [account, data])
+
+  const handleClaim = async () => {
+    setIsClaimingPanelActive(!isClaimingPanelActive)
+    // Open Popup on Click
+    // Get Random of Available List
+    const availableList = await getNFTtokensAvailable(data.tokenAddress)
+    // Show Random Serial Number
+    let randomNo = randomPick(availableList)
+    // Show Swap Item
+    if (ERC20tokens["CLAIM"]?.contract) {
+      console.log(await ERC20tokens["CLAIM"]?.contract.name())
+      console.log((await ERC20tokens["CLAIM"]?.contract.balanceOf("0x15B0E6d785F3eEdF32B3B8D7Abcb7E6001E18Dc5")).toString())
+    }
+
+    async function claimNFT(serialNo: number) {
+      if (NFTswap.contract && NFTregistry.contract) {
+        const amount = ethers.utils.parseEther(data.price.toString());
+        const slot = await NFTregistry.contract.getNFTslotState(NFTcontract?.address, serialNo)
+
+        const totalSupply = (await NFTcontract?.contract.totalSupply()).toNumber()
+        // console.log(slot, totalSupply, serialNo)
+
+        if (!slot.exists && serialNo <= totalSupply) {
+          const tx = await NFTswap.contract.swapNFT(NFTcontract?.address, serialNo, ERC20tokens["CLAIM"]?.address, amount, "", "{}")
+          console.log(tx, ERC20tokens["CLAIM"]?.address, amount, NFTcontract?.address, 1)
+          const result = await tx.wait();
+          console.log(NFTswap.error, tx, result);
+        } else {
+          let _randomNo = randomPick(availableList)
+          await claimNFT(_randomNo)
+        }
+      }
+    }
+
+    await claimNFT(randomNo)
+  }
+
+  const handleApprove = async (CLAIMapprovalState: any) => {
+    if (ERC20tokens["CLAIM"]?.contract) {
+      const [, setIsCurrencyApproval ] = CLAIMapprovalState;
+      const tx = await ERC20tokens["CLAIM"]?.contract.approve(NFTswap.contract.address, ethers.utils.parseEther("9999999"))
+      await tx.wait()
+      setIsCurrencyApproval(true)
+    }
+  }
+
+  const handleWBNBApprove = async (WBNBapprovalState: any) => {
+    if (ERC20tokens["WBNB"]?.contract) {
+      const [, setIsCurrencyApproval ] = WBNBapprovalState;
+      const tx = await ERC20tokens["WBNB"]?.contract.approve(NFTswap.contract.address, ethers.utils.parseEther("9999999"))
+      await tx.wait()
+      setIsCurrencyApproval(true)
+    }
+  }
+
+  const checkClaimBalance = async (account: string, isClaimableState: any) => {
+    console.log("checkClaimBalance", ERC20tokens["CLAIM"])
+    const [, setIsClaimable ] = isClaimableState;
+    if (ERC20tokens["CLAIM"]?.contract) {
+     ERC20tokens["CLAIM"]?.contract.balanceOf(account)
+     .then((balance: any) => {
+       console.log("checking CLAIM", balance.toString())
+       if (balance.gte(ethers.utils.parseEther("1"))) {
+         setIsClaimable(true)
+       } else {
+         setIsClaimable(false)
+       }
+     })
+    }
+    setIsClaimable(false)
+  }
+
+  const checkERC20Approval = async (owner: string, tokenKey: string, spender: string, approvalState: any) => {
+    const [, setIsCurrencyApproval ] = approvalState;
+    console.log(ERC20tokens[tokenKey], spender)
+    const amount = await ERC20tokens[tokenKey]?.contract?.allowance(owner, spender)
+    console.log("checkERC20Approval", tokenKey, spender, amount, amount?.gt(0))
+    if (amount?.gt(0)) { // Update Condition
+      setIsCurrencyApproval(true)
+    } else {
+      setIsCurrencyApproval(false)
+    }
   }
 
   // __RENDER
@@ -50,14 +392,15 @@ export function TradeComponent({ data }: { data: NFTItem }) {
       <div className='status'>
         <div className='columns owner'>
           <span className='label'>Owned by</span>
-          <a className='btn btn-default' href={`${chian.explorer}/address/${data.owner}`} target='_blank'>
+          <a className='btn btn-default' href={`${chain.explorer}/address/${data.owner}`} target='_blank'>
             {data.owner === account ? 'You' : getShortAddress(data.owner)}
           </a>
         </div>
 
         <div className='columns available'>
           <span className='icon bi bi-basket2'></span>
-          <span className='text'>{data.available || 0} Available</span>
+          {/* <span className='text'>{data.available || 0} Available</span> */}
+          <span className='text'>{totalAvailable || 0} Available</span>
         </div>
 
         <div className='columns supply'>
@@ -73,22 +416,41 @@ export function TradeComponent({ data }: { data: NFTItem }) {
         </CurrencyComponent>
 
         {account ? (
-          <button className='btn btn-dark btn-shop' disabled={!data.available} onClick={handleShop}>
-            <span className='icon bi bi-basket2'></span>
-            <span className='text'>{!data?.available ? 'out of stock' : 'buy now'}</span>
-          </button>
+          <div>
+            {
+              !isWBNBapproved ? (
+                <button className='btn btn-dark btn-connect' onClick={() => { handleWBNBApprove(WBNBapprovalState) }}>
+                  <span className='icon bi bi-bag'></span>
+                  <span className='text'>Approve to Buy</span>
+                </button>
+              ) : (
+                <button className='btn btn-dark btn-shop' disabled={totalAvailable < 1} onClick={handleShop}>
+                  <span className='icon bi bi-basket2'></span>
+                  {/* <span className='text'>{!data?.available ? 'out of stock' : 'buy now'}</span> */}
+                  <span className='text'>{totalAvailable < 1 ? 'out of stock' : 'buy now'}</span>
+                </button>
+              )
+            }
+            {
+              data.is_presale && (!isCLAIMApproved ? (
+                <button className='btn btn-dark btn-connect' onClick={() => { handleApprove(CLAIMapprovalState) }}>
+                  <span className='icon bi bi-bag'></span>
+                  <span className='text'>Approve to Claim</span>
+                </button>
+              ) : (
+                <button disabled={!isClamable} className='btn btn-dark btn-connect' onClick={handleClaim}>
+                  <span className='icon bi bi-bag'></span>
+                  <span className='text'>{!isClamable ? 'You have no Claim token' : 'Claim Now'}</span>
+                </button>
+              ))
+            }
+          </div>
         ) : (
           <button className='btn btn-dark btn-connect' onClick={handleSignin}>
             <span className='icon bi bi-wallet2'></span>
             <span className='text'>Connect Wallet</span>
           </button>
         )}
-
-        <button className='btn btn-dark btn-connect' onClick={handleClaim}>
-          <span className='icon bi bi-bag'></span>
-          <span className='text'>Claim Now</span>
-        </button>
-
       </div>
     </div>
   )
