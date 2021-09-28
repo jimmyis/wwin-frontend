@@ -1,4 +1,4 @@
-import { chian } from '@/libs/configs'
+import { chain } from '@/libs/configs'
 import { AbiItem } from '@/libs/web3'
 import { Network } from '@/types/constants'
 
@@ -7,7 +7,7 @@ export const ContractName: string = 'BUSD Token (BUSD)'
 export const ContractAddress: string = {
   [Network.Main]: '0xe9e7cea3dedca5984780bafc599bd69add087d56',
   [Network.Test]: '0x78867bbeef44f2326bf8ddd1941a4439382ef2a7'
-}[chian.network]!
+}[chain.network]!
 
 export const ContractAbi: AbiItem[] = [
   { inputs: [], payable: false, stateMutability: 'nonpayable', type: 'constructor' },

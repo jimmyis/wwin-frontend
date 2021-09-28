@@ -1,4 +1,4 @@
-import { chian } from '@/libs/configs'
+import { chain } from '@/libs/configs'
 import { AbiItem } from '@/libs/web3'
 import { Network } from '@/types/constants'
 
@@ -7,7 +7,7 @@ export const ContractName: string = 'SwapToken'
 export const ContractAddress: string = {
     [Network.Main]: '0x262451c4BFf59747BbCFEb03c5490611BF9Ba635',
     [Network.Test]: '0x262451c4BFf59747BbCFEb03c5490611BF9Ba635'
-}[chian.network]!
+}[chain.network]!
 
 export const ContractAbi: AbiItem[] = [
     {
