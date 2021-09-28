@@ -7,6 +7,7 @@
     "clean": "rimraf .next out",
     "build": "next build",
     "build:export": "next build && next export",
+    "build:export:deploy-firebase": "next build && next export && firebase deploy --only hosting:marketplace",
     "serve": "next start",
     "serve:dev": "next dev",
     "deploy": "rimraf .next out && netlify build && netlify deploy --prod"
