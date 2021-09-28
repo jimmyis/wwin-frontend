@@ -2,7 +2,7 @@
   position: relative;
   display: grid;
   height: 600px;
-  background-image: url('/static/images/cover.jpg');
+  background-image: url("/static/images/cover.jpg");
   background-position: top center;
   background-size: cover;
 
@@ -33,14 +33,16 @@
 
     .h2,
     .h1 {
-      font-family: 'PT Serif', serif;
+      font-family: "PT Serif", serif;
     }
 
     .h2 {
+      font-family: "made-bon-voyage-regular";
       color: #a58231;
-      line-height: 1;
+      // line-height: 1;
       font-size: $font-size-larger * 2;
       font-weight: $font-weight-light;
+      font-weight: 900;
 
       @include screen-xs {
         font-size: $font-size-larger * 1.5;
@@ -48,6 +50,8 @@
     }
 
     .h1 {
+      font-family: "made-bon-voyage-regular";
+      font-weight: 900;
       color: white;
       letter-spacing: 1px;
       font-size: $font-size-larger * 2.25;
@@ -58,12 +62,15 @@
     }
 
     .h4 {
+      font-family: "DB-Gill-Siam-X-Li";
+      font-weight: 900;
       letter-spacing: 1px;
       color: $color-dark-4;
-      font-size: $font-size-large + 2;
+      font-size: $font-size-large + 9 + 2;
+      line-height: 28px;
 
       @include screen-xs {
-        font-size: $font-size-large;
+        font-size: $font-size-large + 9;
       }
     }
   }
