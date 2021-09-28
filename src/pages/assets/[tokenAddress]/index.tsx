@@ -1,51 +1,75 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { Asset, Loading, MediaComponent } from '@/components'
-import { assetService } from '@/services/assets.service'
-import { getQueryAt, getShortAddress, loader } from '@/utils'
+import { chain } from '@/libs/configs'
+// import { assetService } from '@/services/assets.service'
+import { /* getQueryAt, */ getShortAddress,/*  loader */ } from '@/utils'
 import { NFTItem } from '@/types'
 import QRCode from 'react-qr-code'
+
+import { db } from '@/libs/firebase'
+import { doc, getDoc } from "firebase/firestore";
+
+async function getOneDoc(collection: string, id: string) {
+  const docRef = doc(db, collection, id);
+  const docSnap = await getDoc(docRef);
+  const data = docSnap.data();
+  return data as any
+}
 
 export default function AssetsContainer() {
   // __STATE <React.Hooks>
   const { query } = useRouter()
-  const [state, setState] = useState<NFTItem>()
+  const [ state, setState ] = useState<NFTItem>()
 
   // __EFFECTS <React.Hooks>
   useEffect(() => {
-    async function run() {
-      const tokenAddress = getQueryAt(query.tokenAddress!)
-      const tokenId = getQueryAt(query.tokenId!)
-      let res: any = void 0
 
-      if (tokenId) {
-        res = await assetService.getOneByQuery({
-          NFTAddress: tokenAddress,
-          tokenId
-        })
-      } else {
-        res = await assetService.getOne(tokenAddress)
+    (async () => {
+      const id = query?.tokenAddress?.toString().toLowerCase();
+      if (id) {
+        getNFTcollectionData(id)
       }
+    })();
+    // async function run() {
+    //   const tokenAddress = getQueryAt(query.tokenAddress!)
+    //   const tokenId = getQueryAt(query.tokenId!)
+    //   let res: any = void 0
 
-      if (res) {
-        setState({
-          ...res,
-          id: res.id || res.tokenAddress,
-          tokenId: res.tonkenId,
-          price: res.price || 0,
-          available: res.available || 0,
-          totalSupply: res.totalSupply || 1
-        })
-      }
+    //   if (tokenId) {
+    //     res = await assetService.getOneByQuery({
+    //       NFTAddress: tokenAddress,
+    //       tokenId
+    //     })
+    //     console.log(res)
+    //   } else {
+    //     res = await assetService.getOne(tokenAddress)
+    //   }
 
-      loader('off')
-    }
+    //   if (res) {
+    //     setState({
+    //       ...res,
+    //       id: res.id || res.tokenAddress,
+    //       tokenId: res.tonkenId,
+    //       price: res.price || 0,
+    //       available: res.available || 0,
+    //       totalSupply: res.totalSupply || 1
+    //     })
+    //   }
 
-    if (query.tokenAddress) {
-      loader('on')
-      run()
-    }
+    //   loader('off')
+    // }
+
+    // if (query.tokenAddress) {
+    //   loader('on')
+    //   run()
+    // }
   }, [query])
+
+  const getNFTcollectionData = async (id: string) => {
+    const NFTcollection = await getOneDoc("nft_collections", id)
+    setState((NFTcollection as NFTItem))
+  }
 
   // __RENDER
   if (!state) return <Loading />
@@ -56,7 +80,7 @@ export default function AssetsContainer() {
           <div className='ui--assets-header'>
             <h1 className='name'>{state.name}</h1>
             <a className='btn btn-default collection'>
-              <span className='text'>Untitled Collection</span>
+              {/* <span className='text'>Untitled Collection</span> */}
             </a>
           </div>
 
