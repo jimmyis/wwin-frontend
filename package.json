@@ -6,6 +6,7 @@
   "scripts": {
     "clean": "rimraf .next out",
     "build": "next build",
+    "build:export": "next build && next export",
     "serve": "next start",
     "serve:dev": "next dev",
     "deploy": "rimraf .next out && netlify build && netlify deploy --prod"
