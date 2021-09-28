@@ -21,7 +21,7 @@ export function LatestAssetsComponent() {
     },
     {
       id: 3,
-      name: 'Rose Gold Model',
+      name: 'Pink Gold Model',
       media: '/static/media/nft/garuda_v02-rose_gold-thumb_m.jpg',
       link: '#',
       btnLabel: 'Coming Soon',
