@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Profile, Loading, ArticleComponent } from '@/components'
+import { Profile, Loading, NFTitemDisplay } from '@/components'
 // import { userService } from '@/services/user.service'
 import { useSelector, authSelector } from '@/store'
 import { NFTItem } from '@/types'
@@ -74,8 +74,8 @@ export default function ProfileContainer() {
     <Profile.Layout className='main' user={user}>
       {state ? (
         <div className='collects'>
-          {state.map((recoed, index) => (
-            <ArticleComponent data={recoed} key={index} />
+          {state.map((record, index) => (
+            <NFTitemDisplay data={record} key={index} />
           ))}
 
           {!state.length && 'No Data!'}
