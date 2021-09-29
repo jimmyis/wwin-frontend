@@ -33,6 +33,7 @@ export interface NFTItem {
   totalSupply: number
   properties: NFTProperty[]
   is_presale: bool
+  serialNoList?: [string]
 }
 
 export interface NFTProperty {
