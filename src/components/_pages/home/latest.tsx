@@ -22,14 +22,14 @@ export function LatestAssetsComponent() {
     {
       id: 3,
       name: 'Pink Gold Model',
-      media: '/static/media/nft/garuda_v02-rose_gold-thumb_m.jpg',
+      media: '/static/media/Garuda_Pink_Gold_Model.jpeg',
       link: '#',
       btnLabel: 'Coming Soon',
     },
     {
       id: 4,
       name: 'Graphite Model',
-      media: '/static/media/nft/garuda_v02-graphite-thumb_m.jpg',
+      media: '/static/media/Garuda_Graphite_Model.jpeg',
       link: '#',
       btnLabel: 'Coming Soon',
     }
