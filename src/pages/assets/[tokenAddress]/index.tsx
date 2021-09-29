@@ -75,6 +75,9 @@ export default function AssetsContainer() {
   if (!state) return <Loading />
   return (
     <div className='ui--assets router-view'>
+      <div className='ui--assets-fullbar'>
+        <img src='/static/images/header-caption.png' />
+      </div>
       <div className='ui--assets-container'>
         <div className='ui--assets-columns'>
           <div className='ui--assets-header'>
