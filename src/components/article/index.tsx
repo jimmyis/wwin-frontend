@@ -22,6 +22,7 @@ export function ArticleComponent({ data }: Props) {
         <RouterLink className='meta' href={`/assets/${tokenAddress}${tokenId}`}>
           <div className='meta-rows' title={data.name}>
             {isDevelop && <div className='desc'>Untitled Collection</div>}
+            <div className='label'># {data.serialNoList?.join(", ")}</div>
             <div className='name'>{data.name}</div>
           </div>
 
