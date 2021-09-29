@@ -21,6 +21,8 @@
     align-items: center;
     height: 100%;
 
+
+
     &.x2 {
       grid-template-columns: auto 1fr;
     }
@@ -263,6 +265,7 @@
 
       @include screen-xs {
         display: inline-flex;
+        color: #FFF;
       }
     }
   }
