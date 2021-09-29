@@ -87,9 +87,9 @@ export default function AssetsContainer() {
                 {/* <span className='text'>Untitled Collection</span> */}
               </a>
             </div>
-            <div className="rightarea">
+            {/* <div className="rightarea">
               <img src="/static/images/snft-pow.png" />
-            </div>
+            </div> */}
           </div>
 
           <Asset.Trade data={state} />
