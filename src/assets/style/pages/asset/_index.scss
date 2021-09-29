@@ -55,6 +55,15 @@
   &-header {
     position: relative;
 
+    .leftarea{
+      float: left;
+      max-width: 80%;
+    }
+
+    .rightarea{
+      float: right;
+    }
+
     .name {
       line-height: $line-height;
       font-size: $font-size-larger * 1.5;
