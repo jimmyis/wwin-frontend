@@ -75,13 +75,21 @@ export default function AssetsContainer() {
   if (!state) return <Loading />
   return (
     <div className='ui--assets router-view'>
+      <div className='ui--assets-fullbar'>
+        <img src='/static/images/header-caption.png' />
+      </div>
       <div className='ui--assets-container'>
         <div className='ui--assets-columns'>
           <div className='ui--assets-header'>
-            <h1 className='name'>{state.name}</h1>
-            <a className='btn btn-default collection'>
-              {/* <span className='text'>Untitled Collection</span> */}
-            </a>
+            <div className="leftarea">
+              <h1 className='name'>{state.name}</h1>
+              <a className='btn btn-default collection'>
+                {/* <span className='text'>Untitled Collection</span> */}
+              </a>
+            </div>
+            {/* <div className="rightarea">
+              <img src="/static/images/snft-pow.png" />
+            </div> */}
           </div>
 
           <Asset.Trade data={state} />
