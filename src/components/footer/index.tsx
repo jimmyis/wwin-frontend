@@ -86,7 +86,7 @@ export function FooterComponent() {
         <div className='ui--footer-content'>
           <div className='meta'>
             <img className='meta-logo' src='/static/images/logo.svg' />
-            <p className='meta-desc'>Where Blockchain Technology Meets Ancient Tradition</p>
+            <p className='meta-desc'>The world’s first and only Sacred NFT marketplace. SNFTs are highly collectible because of their spiritual value and beauty. You can purchase and sell SNFTs here as well as displaying your SNFTs in a viewing gallery.</p>
           </div>
 
           <div className='menu'>
