@@ -6,6 +6,7 @@ export default function HomeContainer() {
     <div className='ui--home router-view'>
       <Home.Hero />
       <Home.Latest />
+      <Home.Bar />
       {/* <Home.Collections /> */}
       {/* <Home.Auctions /> */}
     </div>
