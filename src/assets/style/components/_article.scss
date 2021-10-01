@@ -48,7 +48,7 @@
         line-height: $line-height;
         font-weight: $font-weight-bold;
 
-        @include text-overflow(22px, 1);
+        @include text-overflow(22px, 2);
       }
 
       .desc {
