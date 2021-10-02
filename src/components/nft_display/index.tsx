@@ -13,7 +13,10 @@ export function NFTitemDisplay({ data }: Props) {
       <div className='ui--article-head'>
         <MediaComponent media={data.image} />
       </div>
-
+      <div className="">
+        { data.name }
+        No. {data.serial_no}
+      </div>
       <div className='ui--article-body'>
       </div>
     </article>
