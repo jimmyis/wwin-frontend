@@ -73,8 +73,8 @@ function getNFTregistryContract() {
 function getNFTswapContract() {
   const name = "NFT Swap"
   // const address = "0x262451c4BFf59747BbCFEb03c5490611BF9Ba635" // Testnet Old
-  const address = "0x7327c237367B0d996F2A5197f46fa931Cf850181" // Mainnet Current
-  const abi = [{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"buyer","type":"address"},{"indexed":true,"internalType":"address","name":"erc721_address","type":"address"},{"indexed":false,"internalType":"uint256","name":"serial_no","type":"uint256"},{"indexed":true,"internalType":"address","name":"erc20_address","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"NFTswap","type":"event"},{"inputs":[{"internalType":"address","name":"erc721_address","type":"address"},{"internalType":"uint256","name":"serial_no","type":"uint256"},{"internalType":"address","name":"erc20_address","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"string","name":"remark","type":"string"},{"internalType":"string","name":"meta","type":"string"}],"name":"swapNFT","outputs":[],"stateMutability":"nonpayable","type":"function"}]
+  const address = "0xb163A78b8169B862D1111F3AcC3B3b169d36c23e" // Mainnet Current
+  const abi = [{"inputs":[{"internalType":"address","name":"buyer","type":"address","indexed":true},{"indexed":true,"internalType":"address","name":"erc721_address","type":"address"},{"indexed":false,"internalType":"uint256","name":"serial_no","type":"uint256"},{"indexed":true,"internalType":"address","name":"erc20_address","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"NFTswap","type":"event","anonymous":false},{"inputs":[],"name":"$nft_registry","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"erc721_address","type":"address"},{"internalType":"uint256","name":"serial_no","type":"uint256"},{"internalType":"address","name":"erc20_address","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"string","name":"remark","type":"string"},{"internalType":"string","name":"meta","type":"string"}],"name":"swapNFT","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"erc721_address","type":"address"},{"internalType":"uint256","name":"serial_no","type":"uint256"},{"internalType":"string","name":"remark","type":"string"},{"internalType":"string","name":"meta","type":"string"}],"name":"swapNFTbyNative","outputs":[],"stateMutability":"payable","type":"function"}]
   return createContractInstance({ name, address, abi })
 }
 
@@ -91,7 +91,7 @@ const ERC20Tokens = {
     name: "WBNB Token",
     symbol: "WBNB",
     address: {
-      "56" /* BSC Mainnet */: "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+      "56" /* BSC Mainnet */: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
       "97" /* BSC Testnet */: "0xae13d989dac2f0debff460ac112a837c89baa7cd"
     }
   },
@@ -128,7 +128,7 @@ const ERC721Tokens: { [address: string]: any } = {
   },
   
   "0xd1a21d267c5ae768ef9f75f38b16e03490c49e4e": {
-    name: "Poramesuan Garuda “Prosperity” Gold Model",
+    name: "Poramesuan Garuda “Prosperity” White Gold Model",
     symbol: "WHITE GOLD",
     address: "0xd1a21d267c5ae768ef9f75f38b16e03490c49e4e",
     chainId: "56"
@@ -168,8 +168,10 @@ function shuffle(array: any[]) {
 }
 
 const getNFTtokensAvailable = async (id: string) => {
-  const { LIST, /* TESTLIST */ } = await getOneDoc("nft_tokens_list:available", id);
-  
+  const doc = await getOneDoc("nft_tokens_list:available", id);
+  console.log(doc);
+  const { LIST, /* TESTLIST */ } = doc;
+
   const availableList = shuffle([...new Set(LIST)])
   return availableList
 }
@@ -255,22 +257,25 @@ export function TradeComponent({ data }: { data: NFTItem }) {
     signin(Connectors.Injected)
   }, [])
 
-  const handleShop = async () => {
+  const handleShop = async (erc20_address?: string) => {
+    console.log("Handle Buy")
     setIsClaimingPanelActive(!isClaimingPanelActive)
 
     console.log(data)
     // Open Popup on Click
     // Get Random of Available List
-    const availableList = await getNFTtokensAvailable(data.tokenAddress)
+    const tokenAddress = data.tokenAddress.toLowerCase()
+    const availableList = await getNFTtokensAvailable(tokenAddress)
+    console.log("CHECK", availableList)
     // Show Random Serial Number
     let randomNo = randomPick(availableList)
     // Show Swap Item
-    if (ERC20tokens["WBNB"].contract) {
-      console.log(await ERC20tokens["WBNB"].contract.name())
-      console.log((await ERC20tokens["WBNB"].contract.balanceOf("0x15B0E6d785F3eEdF32B3B8D7Abcb7E6001E18Dc5")).toString())
+    if (erc20_address && ERC20tokens[erc20_address].contract) {
+      console.log(await ERC20tokens[erc20_address].contract.name())
+      console.log((await ERC20tokens[erc20_address].contract.balanceOf("0x15B0E6d785F3eEdF32B3B8D7Abcb7E6001E18Dc5")).toString())
     }
 
-    async function claimNFT(serialNo: number) {
+    async function swapNFTbyNative(serialNo: number) {
       // console.log(NFTswap.contract, NFTregistry.contract)
       // console.log(ethers.providers)
       // console.log(window.ethereum)
@@ -284,17 +289,53 @@ export function TradeComponent({ data }: { data: NFTItem }) {
         const totalSupply = (await NFTcontract?.contract.totalSupply()).toNumber()
 
         if (!slot.exists && serialNo <= totalSupply) {
-          const tx = await NFTswap.contract.swapNFT(NFTcontract?.address, serialNo, ERC20tokens["WBNB"]?.address, amount, "", "{}")
-          const result = await tx.wait();
-          console.log(NFTswap.error, tx, result);
+          try {
+            const tx = await NFTswap.contract.swapNFTbyNative(NFTcontract?.address, serialNo, "", "{}", 
+            {
+                value: amount,
+                gasLimit: 15000000,
+            })
+            const result = await tx.wait();
+            console.log(NFTswap.error, tx, result);
+          } catch (error: any) {
+            console.error(error);
+            if (error?.code === -32603) {
+              if (error?.data?.code === -32000) {
+                alert("Insufficient BNB to buy")
+              }
+            }
+          }
         } else {
           let _randomNo = randomPick(availableList)
-          await claimNFT(_randomNo)
+          await swapNFTbyNative(_randomNo)
         }
       }
     }
+    // async function claimNFT(serialNo: number) {
+    //   // console.log(NFTswap.contract, NFTregistry.contract)
+    //   // console.log(ethers.providers)
+    //   // console.log(window.ethereum)
+    //   if (NFTswap.contract && NFTregistry.contract) {
+    //     // console.log(await NFTswap.contract.contains(ERC20tokens["WBNB"]?.address))
+    //     // console.log((await NFTswap.contract.maxSupply(NFTcontract?.address)).toString())
+    //     const amount = ethers.utils.parseEther(data.price.toString());
+    //     const slot = await NFTregistry.contract.getNFTslotState(NFTcontract?.address, serialNo)
+    //     console.log(slot, amount, serialNo)
+    //     // // console.log(slot, totalSupply, serialNo)
+    //     const totalSupply = (await NFTcontract?.contract.totalSupply()).toNumber()
 
-    await claimNFT(randomNo)
+    //     if (!slot.exists && serialNo <= totalSupply) {
+    //       const tx = await NFTswap.contract.swapNFT(NFTcontract?.address, serialNo, ERC20tokens[token]?.address, amount, "", "{}")
+    //       const result = await tx.wait();
+    //       console.log(NFTswap.error, tx, result);
+    //     } else {
+    //       let _randomNo = randomPick(availableList)
+    //       await claimNFT(_randomNo)
+    //     }
+    //   }
+    // }
+
+    await swapNFTbyNative(randomNo)
   }
   // const handleShop = useCallback(() => {
   //   if (!data.available) return void 0
@@ -318,7 +359,7 @@ export function TradeComponent({ data }: { data: NFTItem }) {
 
     async function claimNFT(serialNo: number) {
       if (NFTswap.contract && NFTregistry.contract) {
-        const amount = ethers.utils.parseEther(data.price.toString());
+        const amount = ethers.utils.parseEther("1");
         const slot = await NFTregistry.contract.getNFTslotState(NFTcontract?.address, serialNo)
 
         const totalSupply = (await NFTcontract?.contract.totalSupply()).toNumber()
@@ -424,7 +465,7 @@ export function TradeComponent({ data }: { data: NFTItem }) {
                   <span className='text'>Approve to Buy</span>
                 </button>
               ) : (
-                <button className='btn btn-dark btn-shop' disabled={totalAvailable < 1} onClick={handleShop}>
+                <button className='btn btn-dark btn-shop' disabled={totalAvailable < 1} onClick={() => handleShop()}>
                   <span className='icon bi bi-basket2'></span>
                   {/* <span className='text'>{!data?.available ? 'out of stock' : 'buy now'}</span> */}
                   <span className='text'>{totalAvailable < 1 ? 'out of stock' : 'buy now'}</span>
