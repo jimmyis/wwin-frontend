@@ -28,7 +28,7 @@ export interface NFTItem {
   owner: string
   limit: number
   qrURL: string
-  serialNmuber: number
+  serial_no: number
   available: number
   totalSupply: number
   properties: NFTProperty[]
