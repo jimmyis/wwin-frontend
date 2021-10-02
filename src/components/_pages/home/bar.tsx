@@ -1,8 +1,6 @@
-import { useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
 export function BarComponent() {
-  const [text, setText] = useState("");
 //   const [isCopied, setIsCopied] = useState(false);
   
 //   const onCopyText = () => {
