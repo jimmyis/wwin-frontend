@@ -29,40 +29,45 @@ export default function ProfileContainer() {
       
       const wallet_address = (user?.uid as string).toLowerCase() || null
       if (wallet_address) {
-        const docUserOwnerRef = doc(db, "user_owned_token", wallet_address)
-        const docUserOwnerSnap = await getDoc(docUserOwnerRef)
-        const userOwnedData = docUserOwnerSnap.data() as any
-  
-        const userOwnedList = Object.keys(userOwnedData)
-  
-        for (let erc721 of userOwnedList) {
-          const erc721_address = erc721.toLowerCase();
-          const docCollectionsRef = doc(db, "nft_collections", erc721_address)
-          const docCollectionsSnap = await getDoc(docCollectionsRef)
-  
-          if (docCollectionsSnap.exists()) {
-            const collectionsData = docCollectionsSnap.data() as any
-  
-            // const docTokenOwnedRef = doc(db, "nft_tokens_list:owned", erc721)
-            // const docTokenOwnedSnap = await getDoc(docTokenOwnedRef)
-  
-            // let tokenOwnedData = {}
-  
-            // if (docTokenOwnedSnap.exists()) {
-            //   tokenOwnedData = docTokenOwnedSnap.data() as any
-            // }
-  
-            if (Object.keys(collectionsData).length > 0) {
-              const data = {...collectionsData, serialNoList: userOwnedData[erc721].serial_no}
-              records_?.push(data)
+        const docUserOwnedRef = doc(db, "user_owned_token", wallet_address)
+        const docUserOwnedSnap = await getDoc(docUserOwnedRef)
+
+        if (docUserOwnedSnap.exists()) {
+          const userOwnedData = docUserOwnedSnap.data() as any
+    
+          const userOwnedList = Object.keys(userOwnedData)
+    
+          for (let erc721 of userOwnedList) {
+            const erc721_address = erc721.toLowerCase();
+            const docRefNFTcollection = doc(db, "nft_collections", erc721_address)
+            const docSnapNFTcollection = await getDoc(docRefNFTcollection)
+    
+            if (docSnapNFTcollection.exists()) {
+              const collectionData = docSnapNFTcollection.data() as any
+    
+              // const docTokenOwnedRef = doc(db, "nft_tokens_list:owned", erc721)
+              // const docTokenOwnedSnap = await getDoc(docTokenOwnedRef)
+    
+              // let tokenOwnedData = {}
+    
+              // if (docTokenOwnedSnap.exists()) {
+              //   tokenOwnedData = docTokenOwnedSnap.data() as any
+              // }
+    
+              for (let serial_no of userOwnedData[erc721].serial_no) {
+                const data = { ...collectionData, serial_no }
+                records_?.push(data)
+              }
             }
+            
+            // console.log('in map object end', erc721)
           }
-          
-          console.log('in map object end', erc721)
+    
+          // console.log('record', records_)
+          setState(records_)
+        } else {
+          // TODO: Set User Profile not founc
         }
-  
-        console.log('record', records_)
-        setState(records_)
       }
     }
     if (user) run()
