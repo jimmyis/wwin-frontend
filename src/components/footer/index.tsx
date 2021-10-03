@@ -103,6 +103,7 @@ export function FooterComponent() {
             <div className='columns'>
               <h4 className='h4'>Resources</h4>
               <a className='router-link'>WWIN support</a>
+              <a className='btn btn-dark btn-chatwithus' href="https://t.me/winwinwin_news" target="_blank">Chat with us</a>
             </div>
           </div>
         </div>
