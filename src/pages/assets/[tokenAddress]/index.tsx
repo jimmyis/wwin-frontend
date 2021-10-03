@@ -119,8 +119,8 @@ export default function AssetsContainer() {
               <div className='li'>
                 <span className='label'>Contract Address</span>
                 <span className='value'>
-                  <a className='btn btn-default' href={`${chain.explorer}/address/${state.id}`} target='_blank'>
-                    {getShortAddress(state.id)}
+                  <a className='btn btn-default' href={`${chain.explorer}/address/${state.tokenAddress}`} target='_blank'>
+                    {getShortAddress(state.tokenAddress)}
                   </a>
                 </span>
               </div>
