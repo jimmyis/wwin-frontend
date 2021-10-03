@@ -18,7 +18,7 @@ export function BarComponent() {
             <CopyToClipboard text='0x1FC2C1C218B079F21b6FdD52b07e4fd256c0A17f'><img className="copyContract" src="/static/images/copy.svg" alt="Click For Copy Contract Address" /></CopyToClipboard>
           </div>
           <div className="btnarea">
-          <a className='btn btn-default buywwin' href="https://pancakeswap.finance/swap?outputCurrency=0x1FC2C1C218B079F21b6FdD52b07e4fd256c0A17f" target="_blank"><img className="wwintoken" src="/static/images/wwin-token.png" alt="WWIN Token" /> Buy WWIN</a>
+          <a className='btn btn-default buywwin' href="https://pancakeswap.finance/swap?outputCurrency=0x1FC2C1C218B079F21b6FdD52b07e4fd256c0A17f" target="_blank"><img className="wwintoken" src="/static/images/wwin-token.svg" alt="WWIN Token" /> Buy WWIN</a>
           </div>
       </div>
     </section>
