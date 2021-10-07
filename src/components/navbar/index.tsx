@@ -25,11 +25,11 @@ export function NavbarComponent() {
   return (
     <nav className='ui--navbar'>
       <div className={cls('ui--navbar-container', { x2: isProduction })}>
-        <button className='btn btn-default btn-menu2' onClick={onModelActive}>
+        {/* <button className='btn btn-default btn-menu2' onClick={onModelActive}>
           <span className='icon bi bi-justify' style={{
             fontSize: '24px'
           }}></span>
-        </button>
+        </button> */}
 
         <RouterLink className='ui--navbar-logo' href='/' key='home'>
           <img className='image' src='/static/images/logo.svg' />
