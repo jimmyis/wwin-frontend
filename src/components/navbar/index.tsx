@@ -1,14 +1,14 @@
 import { useRef, useCallback } from 'react'
 import { RouterLink } from '@/components'
 import { isDevelop, isProduction } from '@/libs/configs'
-import { useModal, useQueryString } from '@/hooks'
+import { /* useModal ,*/ useQueryString } from '@/hooks'
 import { NavbarUserComponent } from './user'
 import cls from 'classnames'
 
 export function NavbarComponent() {
   // __STATE <React.Hooks>
   const searchRef = useRef(null)
-  const { onModelActive } = useModal(null, 'Main Menu')
+  // const { onModelActive } = useModal(null, 'Main Menu')
   const [_, setQuery, reset] = useQueryString()
 
   // __FUNCTIONS
