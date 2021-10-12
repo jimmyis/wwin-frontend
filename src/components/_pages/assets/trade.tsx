@@ -109,6 +109,7 @@ const ERC20Tokens = {
   }
 }
 
+// TODO: Fix this by move config to DB
 const ERC721Tokens: { [address: string]: any } = {
   // "0xbac7e7a39ba9ba1ce20755561f48a65bc8c8d42c": {
   //   name: "SAMPLE",
@@ -135,6 +136,13 @@ const ERC721Tokens: { [address: string]: any } = {
     name: "Poramesuan Garuda “Prosperity” White Gold Model",
     symbol: "WHITE GOLD",
     address: "0xd1a21d267c5ae768ef9f75f38b16e03490c49e4e",
+    chainId: "56"
+  },
+  
+  "0x714294ae8718527b3660247ef022c8294458478b": {
+    name: "Poramesuan Garuda “Prosperity” Pink Gold Model",
+    symbol: "PINK GOLD",
+    address: "0x714294ae8718527b3660247ef022c8294458478b",
     chainId: "56"
   },
 }
