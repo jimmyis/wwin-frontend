@@ -50,6 +50,12 @@ interface ContractConfig {
   address: { [chainId: string]: string }
 }
 
+interface ERC721ContractConfig {
+  name: string;
+  symbol?: string;
+  address: string;
+}
+
 function getERC20tokenContract(contract_config: ContractConfig, chainId: string | number) {
   console.log("getERC20tokenContract", contract_config)
   const { name, symbol, address: _address } = contract_config
@@ -78,10 +84,8 @@ function getNFTswapContract() {
   return createContractInstance({ name, address, abi })
 }
 
-function getNFTContract(contract_config: ContractConfig) {
-  const { name, symbol, address: _address } = contract_config
-  // const address = "0xbac7e7a39ba9ba1ce20755561f48a65bc8c8d42c" // Testnet
-  const address = "0xD1A21D267c5AE768Ef9f75F38b16e03490C49e4e" // Mainnet - White Gold
+function getNFTContract(contract_config: ERC721ContractConfig) {
+  const { name, symbol, address } = contract_config
   const abi = ERC721.abi
   return createContractInstance({ name, symbol, address, abi })
 }
