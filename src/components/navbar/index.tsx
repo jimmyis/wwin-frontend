@@ -1,14 +1,14 @@
 import { useRef, useCallback } from 'react'
 import { RouterLink } from '@/components'
 import { isDevelop, isProduction } from '@/libs/configs'
-import { useModal, useQueryString } from '@/hooks'
+import { /* useModal ,*/ useQueryString } from '@/hooks'
 import { NavbarUserComponent } from './user'
 import cls from 'classnames'
 
 export function NavbarComponent() {
   // __STATE <React.Hooks>
   const searchRef = useRef(null)
-  const { onModelActive } = useModal(null, 'Main Menu')
+  // const { onModelActive } = useModal(null, 'Main Menu')
   const [_, setQuery, reset] = useQueryString()
 
   // __FUNCTIONS
@@ -25,11 +25,11 @@ export function NavbarComponent() {
   return (
     <nav className='ui--navbar'>
       <div className={cls('ui--navbar-container', { x2: isProduction })}>
-        <button className='btn btn-default btn-menu2' onClick={onModelActive}>
+        {/* <button className='btn btn-default btn-menu2' onClick={onModelActive}>
           <span className='icon bi bi-justify' style={{
             fontSize: '24px'
           }}></span>
-        </button>
+        </button> */}
 
         <RouterLink className='ui--navbar-logo' href='/' key='home'>
           <img className='image' src='/static/images/logo.svg' />
