@@ -76,7 +76,7 @@ export default function AssetsContainer() {
   return (
     <div className='ui--assets router-view'>
       <div className='ui--assets-fullbar'>
-        <img src='/static/images/header-caption.svg'/>
+        <img src='/static/images/header-caption.png' srcSet="/static/images/header-caption@2x.png 2x, /static/images/header-caption@3x.png 3x" />
       </div>
       <div className='ui--assets-container'>
         <div className='ui--assets-columns'>
