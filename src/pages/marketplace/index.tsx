@@ -11,9 +11,9 @@ export default function MarketplaceContainer() {
   // __STATE <React.Hooks>
   const [records, setRecords] = useState<any[]>()
   const [/* query */, setQuery] = useQueryString()
-  const [page, /* setPage */] = useState<any>({
+  const [page, setPage] = useState<any>({
     currentPage: 1,
-    totalItems: 1
+    totalItems: 0
   })
 
   // __EFFECTS <React.Hooks>
@@ -40,7 +40,11 @@ export default function MarketplaceContainer() {
         const data = doc.data()
         records_?.push(data)
       });
-      setRecords(records_)
+      setRecords(records_);
+      setPage({
+        currentPage: 1,
+        totalItems: querySnapshot.docs.length
+      });
     })()
   })
 
