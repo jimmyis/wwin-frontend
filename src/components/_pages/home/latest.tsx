@@ -17,7 +17,7 @@ export function LatestAssetsComponent() {
       media: '/static/media/Garuda_Silver_Model.jpeg',
       link: '/assets/0xd1a21d267c5ae768ef9f75f38b16e03490c49e4e',
       btnLabel: 'Buy Now',
-      external: true
+      external: false
     },
     {
       id: 3,
@@ -25,7 +25,7 @@ export function LatestAssetsComponent() {
       media: '/static/media/Garuda_Pink_Gold_Model.jpeg',
       link: '/assets/0x714294aE8718527B3660247ef022C8294458478B',
       btnLabel: 'Buy Now',
-      external: true
+      external: false
     },
     {
       id: 4,
