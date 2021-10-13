@@ -270,3 +270,25 @@
     }
   }
 }
+.ui--modalmenu{
+  .router-link{
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin: 1rem 0;
+    padding: 1rem 1rem;
+    line-height: 20px;
+    font-size: 20px;
+    text-transform: capitalize;
+    background: #23d136;
+    border-radius: 5px;
+    color: #FFF;
+
+    &:first-child{
+      margin-top: 0;
+    }
+    &:last-child{
+      margin-bottom: 0;
+    }
+  }
+}
