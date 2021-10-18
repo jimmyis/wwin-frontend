@@ -5,7 +5,8 @@ import { useQueryString } from '@/hooks'
 import { Pagination } from 'antd'
 
 import { db } from '@/libs/firebase'
-import { collection, getDocs } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
+import { INFTCollection, INFTCollectionList } from '@/types'
 
 export default function MarketplaceContainer() {
   // __STATE <React.Hooks>
@@ -30,23 +31,37 @@ export default function MarketplaceContainer() {
   //     }
   //   }
 
+  const getNftCollection = async (id: string) => {
+    const docSnap = await getDoc(doc(db, "nft_collections", id));
+    if (docSnap.exists()) {
+      return (docSnap.data() as INFTCollection)
+    }
+    return null
+  }
+
   //   run()
   // }, [query])
   useEffect(() => {
     (async () => {
-      const records_: any[] = []
-      const querySnapshot = await getDocs(collection(db, "nft_collections"));
-      querySnapshot.forEach((doc) => {
-        const data = doc.data()
-        records_?.push(data)
-      });
-      setRecords(records_);
-      setPage({
-        currentPage: 1,
-        totalItems: querySnapshot.docs.length
-      });
+      const records_: INFTCollection[] = []
+      const querySnapshot = await getDoc(doc(db, "nft_collections_list", "recent"));
+      if (querySnapshot.exists()) {
+        // console.log("Document data:", querySnapshot.data())
+        const recentList = (querySnapshot.data() as INFTCollectionList)
+        Object.keys(recentList.LIST).forEach(async (nftId) => {
+          const nftData = await getNftCollection(nftId)
+          if (nftData) {
+            records_?.push(nftData)
+          }
+        })
+        setRecords(records_);
+        setPage({
+          currentPage: 1,
+          totalItems: records_.length
+        });
+      }
     })()
-  })
+  }, [])
 
   // __FUNCTIONS
   // const handleFilter = (value: { [propName: string]: any }) => {

@@ -102,3 +102,37 @@ export interface FileValidation {
   regex: any
   message: string
 }
+
+// nft_collections
+export interface INFTCollection {
+  price: string;
+  tokenAddress: string;
+  name: string;
+  totalSupply: number;
+  properties: IProperty[];
+  currency: string;
+  owner: string;
+  image: string;
+  description: string;
+}
+
+export interface IProperty {
+  image: string;
+  label: string;
+  value: string;
+}
+
+// nft_collections_list
+export interface INFTCollectionList {
+  update_at: FirebaseTimestamp;
+  LIST: { [key: string]: List };
+}
+
+export interface List {
+  created_at: FirebaseTimestamp;
+}
+
+export interface FirebaseTimestamp {
+  seconds: number;
+  nanoseconds: number;
+}
