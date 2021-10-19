@@ -6,11 +6,11 @@ import { Pagination } from 'antd'
 
 import { db } from '@/libs/firebase'
 import { doc, getDoc } from "firebase/firestore";
-import { INFTCollection, INFTCollectionList } from '@/types'
+import { NFTItem, INFTCollectionList } from '@/types'
 
 export default function MarketplaceContainer() {
   // __STATE <React.Hooks>
-  const [records, setRecords] = useState<any[]>()
+  const [records, setRecords] = useState<NFTItem[]>()
   const [/* query */, setQuery] = useQueryString()
   const [page, setPage] = useState<any>({
     currentPage: 1,
@@ -34,7 +34,7 @@ export default function MarketplaceContainer() {
   const getNftCollection = async (id: string) => {
     const docSnap = await getDoc(doc(db, "nft_collections", id));
     if (docSnap.exists()) {
-      return (docSnap.data() as INFTCollection)
+      return (docSnap.data() as NFTItem)
     }
     return null
   }
@@ -43,17 +43,19 @@ export default function MarketplaceContainer() {
   // }, [query])
   useEffect(() => {
     (async () => {
-      const records_: INFTCollection[] = []
+      const records_: NFTItem[] = []
       const querySnapshot = await getDoc(doc(db, "nft_collections_list", "recent"));
       if (querySnapshot.exists()) {
-        // console.log("Document data:", querySnapshot.data())
         const recentList = (querySnapshot.data() as INFTCollectionList)
-        Object.keys(recentList.LIST).forEach(async (nftId) => {
+        for (let nftId of Object.keys(recentList.LIST)) {
           const nftData = await getNftCollection(nftId)
-          if (nftData) {
-            records_?.push(nftData)
+          if (
+            nftData
+            && parseFloat(nftData.price) > 0.0
+          ) {
+            records_.push(nftData)
           }
-        })
+        }
         setRecords(records_);
         setPage({
           currentPage: 1,
@@ -110,7 +112,7 @@ export default function MarketplaceContainer() {
 
           {records?.length ? (
             <div className='ui--marketplace-body'>
-              {records.map((record, index) => (
+              {records?.map((record, index) => (
                 <ArticleComponent data={record} key={index} />
               ))}
             </div>
