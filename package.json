@@ -8,8 +8,8 @@
     "build": "next build",
     "build:development": "NEXT_PUBLIC_BUILD_ENV=development next build",
     "build:export": "next build && next export",
-    "build:export:deploy-firebase": "next build && next export && firebase deploy --only hosting:marketplace",
-    "dev": "rimraf .next out && next dev -p 3000",
+    "build:export:deploy-firebase": "next build && next export && firebase deploy --only hosting:marketplace-dev",
+    "dev": "npx kill-port 3000 && rimraf .next out && next dev -p 3000",
     "serve": "next start -p 4000",
     "serve:development": "NEXT_PUBLIC_BUILD_ENV=development next start -p 4000",
     "deploy": "rimraf .next out && netlify build && netlify deploy --prod"
@@ -32,6 +32,7 @@
     "qs": "^6.10.1",
     "react": "^17.0.2",
     "react-copy-to-clipboard": "^5.0.4",
+    "react-countdown": "^2.3.2",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.12.2",
     "react-qr-code": "^2.0.2",
