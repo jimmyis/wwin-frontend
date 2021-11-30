@@ -1,6 +1,6 @@
 {
   "projects": {
-    "default": "wwin-mainnet"
+    "default": "tokenine-wwin-dev"
   },
   "targets": {
     "wwin-mainnet": {
@@ -8,8 +8,18 @@
         "marketplace": [
           "wwin-marketplace"
         ],
+        "tokenine-wwin-dev": [
+          "tokenine-wwin-dev"
+        ]
+      }
+    },
+    "tokenine-wwin-dev": {
+      "hosting": {
         "marketplace-dev": [
-          "wwin-marketplace-dev"
+          "tokenine-wwin-dev.web.app"
+        ],
+        "tokenine-wwin-dev": [
+          "tokenine-wwin-dev"
         ]
       }
     }
