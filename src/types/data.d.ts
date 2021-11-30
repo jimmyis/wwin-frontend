@@ -8,6 +8,12 @@ export interface Collection<T = any[]> {
   items: T
 }
 
+export interface SellTime {
+  timestamp: number
+  start: number
+  end: number
+}
+
 export interface NFTItem {
   _id: string
   id: string
@@ -37,7 +43,10 @@ export interface NFTItem {
   serialNoList?: [string]
   status?: string
   sell_type?: string
-  marketplace_item_id?: string
+  marketplace_item_id?: string,
+  contract_address: string,
+  current_market_session: number,
+  sell_time: SellTime | null
 }
 
 export interface NFTProperty {

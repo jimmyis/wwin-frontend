@@ -10,7 +10,7 @@ import { getContracts } from '@/libs/contracts'
 export function useContract() {
     // __STATE <React.Hooks>
     const { chainId } = useWeb3React()
-    const contracts = getContracts(chainId)
+    const contracts: any = getContracts(chainId)
 
     // const { db } = useDB()
     // Load contract in database

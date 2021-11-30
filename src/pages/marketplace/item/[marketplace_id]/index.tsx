@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
+import { useWeb3React } from '@web3-react/core'
 import { Asset, Loading, MediaComponent, AuctionPanelComponent } from '@/components'
 import { chain } from '@/libs/configs'
 // import { assetService } from '@/services/assets.service'
@@ -7,12 +8,13 @@ import { /* getQueryAt, */ getShortAddress,/*  loader */ } from '@/utils'
 // import { NFTItem } from '@/types'
 import QRCode from 'react-qr-code'
 import { useDB } from '@/hooks'
-import { loadMarketplaceItemData } from '@/functions/firestore'
-import { doc, onSnapshot } from "firebase/firestore";
+import { loadAllMarketplaceItemData } from '@/functions/firestore'
+import Firestore, { doc, onSnapshot } from "firebase/firestore";
 
 export default function MarketplaceItemContainer() {
   // __STATE <React.Hooks>
   const { query } = useRouter()
+  const { account, chainId } = useWeb3React();
   const [ loading, setLoading ] = useState(true)
   const [ content, setContent ] = useState<any>(null)
   
@@ -21,35 +23,57 @@ export default function MarketplaceItemContainer() {
   // __EFFECTS <React.Hooks>
   useEffect(() => {
     setLoading(true);
-    let unsubscribe = () => {};
+    let unsubscribeMarketplaceItemChange = () => {};
 
     const _id = query?.marketplace_id ? (query?.marketplace_id)?.toString().toLowerCase() : null;
     if (_id && db) {
       (async () => {
         const [ contract_address ] = _id.split("__")
         if (contract_address) {
-          const data_ = await loadMarketplaceItemData(db, _id)
+          const data_ = await loadAllMarketplaceItemData(db, _id)
           setContent(data_)
         }
         setLoading(false);
       })();
   
-      const docRef = doc(db, "nft_marketplace:items", (_id as string));
-      unsubscribe = onSnapshot(docRef, 
-        { includeMetadataChanges: true },
-        (doc: any) => {
-          const content_ = { ...content, nft_marketplace_item: doc.data() }
-          setContent(content_)
-        }
-      );
+      unsubscribeMarketplaceItemChange = handleSubscribe(doc(db, "nft_marketplace:items", (_id as string)))
     }
 
     return () => {
       setContent(null)
       setLoading(false)
-      unsubscribe()
+      unsubscribeMarketplaceItemChange()
     }
-  }, [query])
+  }, [query, account, chainId])
+
+  function handleSubscribe(docRef: Firestore.DocumentReference) {
+    return onSnapshot(docRef, 
+      { includeMetadataChanges: true },
+      (doc: any) => {
+        const content_ = { ...content, nft_marketplace_item: doc.data() }
+        setContent(content_)
+      }
+    );
+  }
+
+  async function handleReload() {
+    setLoading(true);
+    const _id = query?.marketplace_id ? (query?.marketplace_id)?.toString().toLowerCase() : null;
+    if (_id && db) {
+      (async () => {
+        const [ contract_address ] = _id.split("__")
+        if (contract_address) {
+          const data_ = await loadAllMarketplaceItemData(db, _id)
+          setContent(data_)
+        }
+        setLoading(false);
+      })();
+    }
+  }
+
+  const handlers = {
+    handleReload
+  }
 
   // __RENDER
   return (
@@ -77,16 +101,20 @@ export default function MarketplaceItemContainer() {
                 </div>
 
                 {/* <Asset.Trade data={content} /> */}
-                <AuctionPanelComponent data={content} />
+                <AuctionPanelComponent data={content} handlers={handlers} />
 
                 <div className='ui--assets-desc'>
                   <div className='content-header'>description</div>
 
-                  <div className='description' dangerouslySetInnerHTML={{ __html: content?.nft_item.description }}></div>
+                  { content?.nft_item && (
+                    <div className='description' dangerouslySetInnerHTML={{ __html: content?.nft_item?.description }}></div>
+                  )
+                    
+                  }
 
-                  {content?.nft_item.qrURL && (
+                  {content?.nft_item?.qrURL && (
                     <div className='qr-code'>
-                      <QRCode value={content?.nft_item.qrURL} size={99} />
+                      <QRCode value={content?.nft_item?.qrURL} size={99} />
                     </div>
                   )}
                 </div>
@@ -94,7 +122,7 @@ export default function MarketplaceItemContainer() {
 
               <div className='ui--assets-columns'>
                 <div className='ui--assets-media'>
-                  <MediaComponent media={content?.nft_item.image} />
+                  <MediaComponent media={content?.nft_item?.image} />
                 </div>
 
                 <div className='ui--assets-details'>
@@ -104,16 +132,16 @@ export default function MarketplaceItemContainer() {
                     <div className='li'>
                       <span className='label'>Contract Address</span>
                       <span className='value'>
-                        <a className='btn btn-default' href={`${chain.explorer}/address/${content?.nft_item.tokenAddress}`} target='_blank'>
-                          {getShortAddress(content?.nft_item.tokenAddress)}
+                        <a className='btn btn-default' href={`${chain.explorer}/address/${content?.nft_item?.tokenAddress}`} target='_blank'>
+                          {getShortAddress(content?.nft_item?.tokenAddress)}
                         </a>
                       </span>
                     </div>
 
-                    {content?.nft_item.tokenId && (
+                    {content?.nft_item?.tokenId && (
                       <div className='li'>
                         <span className='label'>Token ID</span>
-                        <span className='value'>{content?.nft_item.tokenId}</span>
+                        <span className='value'>{content?.nft_item?.tokenId}</span>
                       </div>
                     )}
 
@@ -129,7 +157,7 @@ export default function MarketplaceItemContainer() {
                   </div>
                 </div>
 
-                <Asset.Property data={content?.nft_item.properties} />
+                <Asset.Property data={content?.nft_item?.properties} />
               </div>
             </div>
           </div>

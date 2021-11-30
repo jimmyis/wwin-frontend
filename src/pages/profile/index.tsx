@@ -5,7 +5,7 @@ import { useSelector, authSelector } from '@/store'
 import { NFTItem } from '@/types'
 import { useDB } from '@/hooks'
 import { useWeb3React } from '@web3-react/core'
-import { getNFTcollectionData, getUserOwnedTokenData } from "@/functions/firestore"
+import { loadSingleNFTcollectionData, loadSingleMarketplaceItemData, loadSingleMarketplaceSessionData, getUserOwnedTokenData } from "@/functions/firestore"
 
 export default function ProfileContainer() {
   // __STATE <React.Hooks>
@@ -43,7 +43,7 @@ export default function ProfileContainer() {
 
   async function updateSingleNFTData(id: string, account: string) {
     if (account && db) {
-      const _nft_collection_data = await getNFTcollectionData(db, id)
+      const _nft_collection_data = await loadSingleNFTcollectionData(db, id)
       const _user_owned_token = await getUserOwnedTokenData(db, account)
   
       const ownedNFTList_ = ownedNFTList ? [ ...ownedNFTList ] : []
@@ -52,14 +52,23 @@ export default function ProfileContainer() {
 
       const  _data = { ..._nft_collection_data, ..._user_owned_token[id].serial_no[serial_no], contract_address: id, serial_no }
       ownedNFTList_.splice(index, 1, _data)
-    
 
       setOwnedNFTList(ownedNFTList_)
     }
   }
 
+  function loadingScreenOn() {
+    console.log("Profile page loading on")
+  }
+
+  function loadingScreenOff() {
+    console.log("Profile page loading off")
+  }
+
   const handlers = {
-    updateSingleNFTData
+    updateSingleNFTData,
+    loadingScreenOn,
+    loadingScreenOff
   }
 
   // __RENDER
@@ -103,17 +112,21 @@ async function getOwnedNFTs({ account, db }: any) {
     for (let erc721 of userOwnedList) {
       const erc721_address = erc721.toLowerCase();
 
-      const nft_item_data = await getNFTcollectionData(db, erc721_address)
+      const nft_item_data = await loadSingleNFTcollectionData(db, erc721_address)
   
       // Workaround
       if (Array.isArray(user_owned_token[erc721].serial_no)) {
         for (let serial_no of user_owned_token[erc721].serial_no) {
-          let item = { ...nft_item_data, ...user_owned_token, contract_address: erc721, serial_no }
+          const marketplace_item = await loadSingleMarketplaceItemData(db, erc721_address + "__" + serial_no)
+          const marketplace_session = marketplace_item?.current_market_session_active ? await loadSingleMarketplaceSessionData(db, marketplace_item._id + "@" + marketplace_item.current_market_session) : null
+          let item = { ...nft_item_data, marketplace_item, marketplace_session, ...user_owned_token, contract_address: erc721, serial_no }
           records_?.push(item)
         }
       } else {
         for (let serial_no in user_owned_token[erc721].serial_no) {
-          let item = { ...nft_item_data, ...user_owned_token[erc721].serial_no[serial_no], contract_address: erc721, serial_no }
+          const marketplace_item = await loadSingleMarketplaceItemData(db, erc721_address + "__" + serial_no)
+          const marketplace_session = marketplace_item?.current_market_session_active ? await loadSingleMarketplaceSessionData(db, marketplace_item._id + "@" + marketplace_item.current_market_session) : null
+          let item = { ...nft_item_data, marketplace_item, marketplace_session, ...user_owned_token[erc721].serial_no[serial_no], contract_address: erc721, serial_no }
           records_?.push(item)
         }
       }

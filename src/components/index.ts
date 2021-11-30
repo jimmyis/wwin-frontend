@@ -14,6 +14,7 @@ export { MediaComponent } from './media'
 export { CollapseComponent } from './collapse'
 export { Loading } from './loader/fetch'
 export { CurrencyComponent } from './icon/currency'
+export { CountdownTimerDisplay } from './timer'
 
 // Page Components.
 export { Home } from './_pages/home'

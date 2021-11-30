@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useRouter } from 'next/router'
+// import { useRouter } from 'next/router'
 import { useWeb3React } from '@web3-react/core'
 import { useAuth, useInactiveListener } from '@/hooks'
 import { configs, getCookie } from '@/libs/cookies'
@@ -9,7 +9,7 @@ import { loader } from '@/utils'
 
 export function UseEagerConnect() {
   // __STATE <Rect.Hooks>
-  const router = useRouter()
+  // const router = useRouter()
   const { signin } = useAuth()
   const { account, active } = useWeb3React()
   useInactiveListener()
@@ -29,8 +29,9 @@ export function UseEagerConnect() {
       if (getCookie(configs.APP_AUTH)) {
         authService.getProfile()
       } else {
-        const res = await authService.signin()
-        if (res) router.push('/profile')
+        await authService.signin()
+        // const res = await authService.signin()
+        // if (res) router.push('/profile')
       }
     }
 

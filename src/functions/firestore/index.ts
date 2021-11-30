@@ -3,7 +3,21 @@ import { FirestoreCollectionIDs } from "@/types/firestore"
 import { safeAddress } from '@/utils/blockchain'
 
 
-export async function getNFTcollectionData(db: any, id: string) {
+export async function loadStoreContract(db: any, id: string, /* common_contract_type?: string */) {
+    // if (common_contract_type) {
+    //     return 
+    // }
+    
+    if (id && db) {
+        const result_ = await getOneDoc(db, FirestoreCollectionIDs.CONTRACTS , (safeAddress(id) as string))
+        console.log("loadStoreContract", result_)
+        return result_
+
+    }
+    return null
+}
+
+export async function loadSingleNFTcollectionData(db: any, id: string) {
     if (id && db) {
       return await getOneDoc(db, FirestoreCollectionIDs.NFT_COLLECTIONS , id)
     }
@@ -12,7 +26,7 @@ export async function getNFTcollectionData(db: any, id: string) {
 
 export async function getUserOwnedTokenData(db: any, account: string) {
     if (account && db) {
-        const result_ = await getOneDoc(db, FirestoreCollectionIDs.USER_OWNED_TOKEN , safeAddress(account))
+        const result_ = await getOneDoc(db, FirestoreCollectionIDs.USER_OWNED_TOKEN , (safeAddress(account) as string))
         return result_
     }
     return null
@@ -31,29 +45,16 @@ export async function loadMarketplaceListData(db: any, marketplace_list_id: stri
     }
 }
 
-export async function loadMarketplaceItemData(db: any, marketplace_item_id: string) {
-    const data_: any = { marketplace_item_id }
-    const _doc_nft_marketplace_item_Ref = doc(db, "nft_marketplace:items", marketplace_item_id)
-    const _doc_nft_marketplace_item = await getDoc(_doc_nft_marketplace_item_Ref);
-    if (_doc_nft_marketplace_item.exists()) {
-      const _data_nft_marketplace_item = _doc_nft_marketplace_item.data() as any
-      data_.nft_marketplace_item = _data_nft_marketplace_item
+export async function loadSingleMarketplaceItemData(db: any, id: string) {
+    const _docRef = doc(db, FirestoreCollectionIDs.NFT_MARKETPLACE_ITEMS, id)
+    const _doc = await getDoc(_docRef);
+    if (_doc.exists()) {
+      return { ..._doc.data() as any }
     }
-
-    const [ contract_address, serial_no ] = marketplace_item_id.split("__")
-    const _doc_nft_item_Ref = doc(db, "nft_collections", contract_address)
-    const _doc_nft_item = await getDoc(_doc_nft_item_Ref);
-    if (_doc_nft_item.exists()) {
-      const _data_nft_item = _doc_nft_item.data() as any
-      data_.nft_item = _data_nft_item
-      data_.contract_address = contract_address
-      data_.serial_no = serial_no
-    }
-
-    return data_
+    return null
 }
 
-export async function loadMarketplaceSessionData(db: any, id: string) {
+export async function loadSingleMarketplaceSessionData(db: any, id: string) {
     const _docRef = doc(db, FirestoreCollectionIDs.NFT_MARKETPLACE_SESSIONS, id)
     const _doc = await getDoc(_docRef);
     if (_doc.exists()) {
@@ -61,6 +62,35 @@ export async function loadMarketplaceSessionData(db: any, id: string) {
     }
     return null
 }
+
+export async function loadAllMarketplaceItemData(db: any, marketplace_item_id: string) {
+    const data_: any = { marketplace_item_id }
+    try {
+        // Get current marketplace item data.
+        data_.nft_marketplace_item = await loadSingleMarketplaceItemData(db,  marketplace_item_id)
+
+        if (data_.nft_marketplace_item) {
+            // Get current marketplace session.
+            if (data_.nft_marketplace_item.current_market_session_active) {
+                const marketplace_session_id = marketplace_item_id + "@" + data_.nft_marketplace_item.current_market_session;
+                data_.marketplace_session_id = marketplace_session_id
+                data_.nft_marketplace_session = await loadSingleMarketplaceSessionData(db, marketplace_session_id)
+            }
+        }
+
+        // Get NFT collection data.
+        const [ contract_address, serial_no ] = marketplace_item_id.split("__")
+        data_.nft_item = await loadSingleNFTcollectionData(db, contract_address)
+        data_.contract_address = contract_address
+        data_.serial_no = serial_no
+
+    } catch (error) {
+
+    }
+
+    return data_
+}
+
 
   // Generic Function for Firestore
 export async function getOneDoc(db: any, collection: FirestoreCollectionIDs, id: string) {
@@ -148,7 +178,7 @@ export async function getFirestoreDocument(db: any, targetCollection: string, ta
         }
 
         const _ref = doc(db, targetCollection, targetDocument)
-        console.log(_ref)
+        console.log(_ref, options)
         const _doc = await getDoc(_ref);
         result_.result = _doc.exists() ? _doc.data() : null
 

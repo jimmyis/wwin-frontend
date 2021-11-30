@@ -14,7 +14,7 @@ export default function OfficialMarketplace() {
   const [loading, setLoading] = useState(true)
   const [records, setRecords] = useState<any[]>([])
   const [/* query */, setQuery] = useQueryString()
-  const [page, setPage] = useState<any>({
+  const [page, ] = useState<any>({
     currentPage: 1,
     totalItems: 0
   })

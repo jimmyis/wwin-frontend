@@ -5,7 +5,7 @@ import { ItemCardAuctionComponent, Loading } from '@/components'
 import { Pagination } from 'antd'
 
 import { useDataContext } from '@/context'
-import { loadMarketplaceListData, loadMarketplaceItemData } from "@/functions/firestore"
+import { loadMarketplaceListData, loadAllMarketplaceItemData } from "@/functions/firestore"
 
 export default function AuctionlMarketplace() {
   const { db } = useDataContext();
@@ -29,8 +29,8 @@ export default function AuctionlMarketplace() {
       const marketplaceListData = await loadMarketplaceListData(db, "auction:recent")
       if (marketplaceListData.list) {
         records_ = await Promise.all(marketplaceListData.list.map(async (marketplace_item_id: string) => {
-          const _data = await loadMarketplaceItemData(db, marketplace_item_id);
-          console.log("loadMarketplaceItemData", _data)
+          const _data = await loadAllMarketplaceItemData(db, marketplace_item_id);
+          console.log("loadAllMarketplaceItemData", _data)
           return _data
         }))
         setList(marketplaceListData.list)

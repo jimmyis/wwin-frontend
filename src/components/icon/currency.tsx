@@ -4,14 +4,15 @@ import cls from 'classnames'
 
 export interface Props {
   size: 'small' | 'medium' | 'large'
-  currency: string
+  symbol?: string
+  currency?: string
   amount: string | number
   children?: ReactNode
 }
 
 export function CurrencyComponent({ children, ...props }: Props) {
   // __STATE <React.Hooks>
-  const icon = `/static/images/${lowerCase(props.currency)}.png`
+  const icon = `/static/images/${lowerCase(props.symbol || "coin-placeholder")}.png`
 
   // __RENDER
   return (
