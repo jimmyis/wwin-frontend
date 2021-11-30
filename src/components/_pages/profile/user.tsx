@@ -14,7 +14,7 @@ export interface Props {
 
 export function UserComponent({ user }: Props) {
   // __STATE <React.Hooks>
-  const { onModelActive } = useModal(null, 'Edit Profile')
+  const { onModalActive } = useModal(null, 'Edit Profile')
 
   // __FUNCTIONS
   const submit = useCallback(async (file: File) => {
@@ -82,7 +82,7 @@ export function UserComponent({ user }: Props) {
       </div>
 
       <div className='user-action'>
-        <button className='btn btn-overlay' onClick={() => onModelActive(<EditProfileModal user={user} />)}>
+        <button className='btn btn-overlay' onClick={() => onModalActive(<EditProfileModal user={user} />)}>
           <span className='icon bi bi-gear'></span>
           <span className='text'>edit profile</span>
         </button>

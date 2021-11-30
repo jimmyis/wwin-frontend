@@ -3,8 +3,8 @@ import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
 import { Input } from '@/components'
 import { setFormat } from '@/libs/moment'
-import { demoService } from '@/services/demo.service'
-import { dialog, price } from '@/utils'
+// import { demoService } from '@/services/demo.service'
+import { /* dialog,  */price } from '@/utils'
 
 export default function AssetSellContainer() {
   // __STATE <React.Hooks>
@@ -22,20 +22,20 @@ export default function AssetSellContainer() {
   })
 
   // __FUNCTIONS
-  const submit = useCallback(async (formData): Promise<void> => {
-    const res = await demoService.sign('Sign to sell NFT.')
-    await dialog(
-      `<pre>${JSON.stringify(
-        {
-          signToken: res,
-          ...formData
-        },
-        null,
-        2
-      )}</pre>`
-    )
+  const submit = useCallback(async (/* formData */): Promise<void> => {
+    // const res = await demoService.sign('Sign to sell NFT.')
+    // await dialog(
+    //   `<pre>${JSON.stringify(
+    //     {
+    //       signToken: res,
+    //       ...formData
+    //     },
+    //     null,
+    //     2
+    //   )}</pre>`
+    // )
 
-    router.push('/assets/' + res)
+    router.push('/assets/'/* + res */)
   }, [])
 
   // __RENDER

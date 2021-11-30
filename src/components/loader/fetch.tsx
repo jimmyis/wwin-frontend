@@ -4,7 +4,7 @@ import { loader } from '@/utils'
 export function Loading() {
   // __EFFECTS <React.Hooks>
   useEffect(() => {
-    loader('on')
+    // loader('on')
     return () => loader('off')
   }, [])
 

@@ -8,22 +8,26 @@ export interface Preview {
   isAudio: boolean
 }
 
-export async function getMediaBlob(input: string | Blob | File): Promise<Preview> {
-  if (typeof input === 'string') {
-    const res = await fetch(input).then((r) => r.blob())
-    return {
-      url: createObjectURL(res),
-      isImage: isImage(res.type),
-      isVideo: isVideo(res.type),
-      isAudio: isAudio(res.type)
+export async function getMediaBlob(input: string | Blob | File): Promise<Preview | void> {
+  try {
+    if (typeof input === 'string') {
+      const res = await fetch(input).then((r) => r.blob())
+      return {
+        url: createObjectURL(res),
+        isImage: isImage(res.type),
+        isVideo: isVideo(res.type),
+        isAudio: isAudio(res.type)
+      }
+    } else {
+      return {
+        url: createObjectURL(input),
+        isImage: isImage(input.type),
+        isVideo: isVideo(input.type),
+        isAudio: isAudio(input.type)
+      }
     }
-  } else {
-    return {
-      url: createObjectURL(input),
-      isImage: isImage(input.type),
-      isVideo: isVideo(input.type),
-      isAudio: isAudio(input.type)
-    }
+  } catch (error: any) {
+    console.error("ERROR: getMediaBlob", error)
   }
 }
 

@@ -28,11 +28,12 @@ export function toUint256(n: BigNumber.Value) {
   return new BigNumber(n).times(BIG_TEN.pow(18))
 }
 
-export function ContractFactory(contractAbi: AbiItem | AbiItem[], address: string): Contract {
+export function ContractFactory(contractAbi: AbiItem | AbiItem[], contractAddress: string): Contract {
   if (!isBrowser) throw new Error('Contract Factory is not support on SSR.')
 
   const provider: Provider = GivenProvider()
   const { eth } = new Web3(provider)
+  const address = contractAddress
 
   return new eth.Contract(contractAbi, address)
 }
@@ -59,12 +60,17 @@ export function getEtherProvider(): Eth | void {
   return eth
 }
 
+// To be removed
 export function getRpcUrl(): string {
-  const rpc = (rpcs as any)[chain.network]
-  const idx = Math.floor(Math.random() * rpc.length)
-  return rpc[idx]
+  if (process.browser) {
+    const rpc = (rpcs as any)[(window as any).ethereum]
+    const idx = Math.floor(Math.random() * rpc.length)
+    return rpc[idx]
+  }
+  return ""
 }
 
+// To be removed
 export function getToken(symbol: string) {
   const token = tokens.findOne('symbol', upperCase(symbol))
 

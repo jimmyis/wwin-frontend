@@ -1,6 +1,6 @@
 import { Contract, ContractSendMethod as ContractMethod } from '@/libs/web3'
-import { ContractFactory } from '@/libs/web3'
 import { ContractAddress, ContractAbi } from './abi/MARKET'
+import { build } from './common'
 
 export interface NFTSell {
   ownerAddress: string
@@ -38,11 +38,10 @@ export interface IContract extends Contract {
 }
 
 export const marketContract = {
-  build(): IContract {
-    return ContractFactory(ContractAbi, ContractAddress)
+  build(chainId: number | undefined): any {
+    return build(ContractAbi, ContractAddress, chainId)
   },
-
-  getAddress(): string {
-    return ContractAddress
+  getAddress(chainId: number | undefined): string {
+    return ContractAddress[chainId || 97]
   }
 }

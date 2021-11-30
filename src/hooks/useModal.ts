@@ -28,7 +28,7 @@ export function useModal(component: ReactNode, title?: string) {
   }, [])
 
   return {
-    onModelActive: handleOpen,
-    onModelClose: handleClose
+    onModalActive: handleOpen,
+    onModalClose: handleClose
   }
 }

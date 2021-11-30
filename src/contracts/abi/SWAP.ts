@@ -1,13 +1,11 @@
-import { chain } from '@/libs/configs'
 import { AbiItem } from '@/libs/web3'
-import { Network } from '@/types/constants'
 
 export const ContractName: string = 'SwapToken'
 
-export const ContractAddress: string = {
-    [Network.Main]: '0x262451c4BFf59747BbCFEb03c5490611BF9Ba635',
-    [Network.Test]: '0x262451c4BFf59747BbCFEb03c5490611BF9Ba635'
-}[chain.network]!
+export const ContractAddress: { [chainId: string | number]: string } = {
+    56: '0x262451c4BFf59747BbCFEb03c5490611BF9Ba635',
+    97: '0x262451c4BFf59747BbCFEb03c5490611BF9Ba635'
+}
 
 export const ContractAbi: AbiItem[] = [
     {

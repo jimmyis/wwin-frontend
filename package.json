@@ -6,10 +6,12 @@
   "scripts": {
     "clean": "rimraf .next out",
     "build": "next build",
+    "build:development": "NEXT_PUBLIC_BUILD_ENV=development next build",
     "build:export": "next build && next export",
     "build:export:deploy-firebase": "next build && next export && firebase deploy --only hosting:marketplace",
-    "serve": "next start",
-    "serve:dev": "next dev",
+    "dev": "rimraf .next out && next dev -p 3000",
+    "serve": "next start -p 4000",
+    "serve:development": "NEXT_PUBLIC_BUILD_ENV=development next start -p 4000",
     "deploy": "rimraf .next out && netlify build && netlify deploy --prod"
   },
   "dependencies": {

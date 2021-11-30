@@ -15,7 +15,7 @@ export interface Props {
 
 export function MediaComponent({ media, autoPlay }: Props) {
   // __STATE <React.Hooks>
-  const [state, setState] = useState(defMedia)
+  const [state, setState] = useState<any>(defMedia)
   const elm = useRef<HTMLDivElement>(null)
 
   // __EFFECTS <React.Hooks>

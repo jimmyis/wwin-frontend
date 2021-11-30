@@ -1,13 +1,11 @@
-import { chain } from '@/libs/configs'
 import { AbiItem } from '@/libs/web3'
-import { Network } from '@/types/constants'
 
 export const ContractName: string = 'WWINToken'
 
-export const ContractAddress: string = {
-  [Network.Main]: '0x1FC2C1C218B079F21b6FdD52b07e4fd256c0A17f',
-  [Network.Test]: '0xf5d693cE8515024aAF496CDF11Bdb18Ca843Acee'
-}[chain.network]!
+export const ContractAddress: { [chainId: string | number]: string } = {
+  56: '0x1FC2C1C218B079F21b6FdD52b07e4fd256c0A17f',
+  97: '0xf5d693cE8515024aAF496CDF11Bdb18Ca843Acee'
+}
 
 export const ContractAbi: AbiItem[] = [
   { inputs: [], payable: false, stateMutability: 'nonpayable', type: 'constructor' },

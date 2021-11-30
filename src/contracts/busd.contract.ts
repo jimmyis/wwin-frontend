@@ -1,23 +1,12 @@
-import { Contract } from '@/libs/web3'
-import { ContractFactory } from '@/libs/web3'
-import { ContractMethods, ContractEvents } from '@/types/contract'
 import { ContractAddress, ContractAbi } from './abi/BUSD'
+import { build } from './common'
 
-export interface IMethods extends ContractMethods {}
-
-export interface IEvents extends ContractEvents {}
-
-export interface IContract extends Contract {
-  methods: IMethods
-  events: IEvents
-}
 
 export const busdContract = {
-  build(): IContract {
-    return ContractFactory(ContractAbi, ContractAddress)
+  build(chainId: number): any {
+    return build(ContractAbi, ContractAddress, chainId)
   },
-
-  getAddress(): string {
-    return ContractAddress
+  getAddress(chainId: string | number): string {
+    return ContractAddress[chainId]
   }
 }

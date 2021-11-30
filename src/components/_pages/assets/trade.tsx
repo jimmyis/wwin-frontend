@@ -11,8 +11,10 @@ import { dialog, loader, getRandom, getShortAddress, upperCase, lowerCase } from
 import { NFTItem } from '@/types'
 import { Connectors } from '@/types/constants'
 import { notification as notice } from 'antd'
+import { useWeb3React } from '@web3-react/core'
 // import { demoService } from '@/services/demo.service'
 import { ethers, Contract } from "ethers"
+import { useDB } from "@/hooks"
 
 function createContractInstance(_contract: { name?: string, symbol?: string, address: string, abi: any }) {
   const contract = ({ 
@@ -71,7 +73,7 @@ function chainIdMatcher(chainId: string | number) {
 function getNFTregistryContract() {
   const name = "NFT Registry"
   // const address = "0x262451c4BFf59747BbCFEb03c5490611BF9Ba635" // Testnet Old
-  const address = "0x7cA07b1BBE7E78949C3efeeb23f3429e4d3fA3cf" // Mainnet Current
+  const address = "0x7ca07b1bbe7e78949c3efeeb23f3429e4d3fa3cf" // Mainnet Current
   const abi = [{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"inputs":[{"internalType":"address","name":"erc20_address","type":"address"}],"name":"getERC20token","outputs":[{"components":[{"internalType":"address","name":"contract_address","type":"address"},{"internalType":"string","name":"symbol","type":"string"},{"internalType":"bool","name":"active","type":"bool"},{"internalType":"string","name":"meta","type":"string"}],"internalType":"struct I_NFT_Registry.ERC20Token","name":"","type":"tuple"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"erc721_address","type":"address"}],"name":"getERC721token","outputs":[{"components":[{"internalType":"address","name":"contract_address","type":"address"},{"internalType":"string","name":"name","type":"string"},{"internalType":"uint256","name":"max_supply","type":"uint256"},{"internalType":"uint256[]","name":"max_supply_history","type":"uint256[]"},{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"payee","type":"address"},{"internalType":"bool","name":"active","type":"bool"},{"internalType":"string","name":"meta","type":"string"}],"internalType":"struct I_NFT_Registry.ERC721Token","name":"","type":"tuple"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"erc721_address","type":"address"},{"internalType":"address","name":"erc20_address","type":"address"}],"name":"getExchangeRateForNFTcollection","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"erc721_address","type":"address"},{"internalType":"uint256","name":"serial_no","type":"uint256"},{"internalType":"address","name":"erc20_address","type":"address"}],"name":"getExchangeRateForSpecificNFT","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"erc20_address","type":"address"}],"name":"getMinimumExchangeRate","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"erc721_address","type":"address"},{"internalType":"uint256","name":"serial_no","type":"uint256"}],"name":"getNFTslotState","outputs":[{"components":[{"internalType":"bool","name":"exists","type":"bool"},{"internalType":"uint256","name":"serial_no","type":"uint256"},{"internalType":"string","name":"status","type":"string"},{"internalType":"uint256","name":"timestamp","type":"uint256"},{"internalType":"string","name":"remark","type":"string"},{"internalType":"string","name":"meta","type":"string"},{"internalType":"address","name":"operator","type":"address"}],"internalType":"struct I_NFT_Registry.SlotState","name":"","type":"tuple"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"}]
   return createContractInstance({ name, address, abi })
 }
@@ -79,7 +81,8 @@ function getNFTregistryContract() {
 function getNFTswapContract() {
   const name = "NFT Swap"
   // const address = "0x262451c4BFf59747BbCFEb03c5490611BF9Ba635" // Testnet Old
-  const address = "0xb163A78b8169B862D1111F3AcC3B3b169d36c23e" // Mainnet Current
+  // const address = "0xb163A78b8169B862D1111F3AcC3B3b169d36c23e" // Mainnet Current
+  const address = "0x19A330E00B1dedf395Cf22DA61949c330dD6d243" // Mainnet Current V0.2.1
   const abi = [{"inputs":[{"internalType":"address","name":"buyer","type":"address","indexed":true},{"indexed":true,"internalType":"address","name":"erc721_address","type":"address"},{"indexed":false,"internalType":"uint256","name":"serial_no","type":"uint256"},{"indexed":true,"internalType":"address","name":"erc20_address","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"NFTswap","type":"event","anonymous":false},{"inputs":[],"name":"$nft_registry","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"erc721_address","type":"address"},{"internalType":"uint256","name":"serial_no","type":"uint256"},{"internalType":"address","name":"erc20_address","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"string","name":"remark","type":"string"},{"internalType":"string","name":"meta","type":"string"}],"name":"swapNFT","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"erc721_address","type":"address"},{"internalType":"uint256","name":"serial_no","type":"uint256"},{"internalType":"string","name":"remark","type":"string"},{"internalType":"string","name":"meta","type":"string"}],"name":"swapNFTbyNative","outputs":[],"stateMutability":"payable","type":"function"}]
   return createContractInstance({ name, address, abi })
 }
@@ -147,12 +150,13 @@ const ERC721Tokens: { [address: string]: any } = {
   },
 }
 
-import { db } from '@/libs/firebase'
+import firebaseApp from '@/libs/firebase'
 import { doc, getDoc } from "firebase/firestore";
 // import { setDoc } from "firebase/firestore";
 
 async function getOneDoc(collection: string, id: string) {
-  const docRef = doc(db, collection, id);
+  const { db } = firebaseApp
+  const docRef = doc((db as any), collection, id);
   const docSnap = await getDoc(docRef);
   const data = docSnap.data();
   return data as any
@@ -205,7 +209,8 @@ const getNFTtokensAvailable = async (id: string) => {
 export function TradeComponent({ data }: { data: NFTItem }) {
   // __STATE <React.Hooks>
   const { account, signin } = useAuth()
-  // const { onModelActive: modal } = useModal(null, 'checkout')
+  const { chainId } = useDB()
+  // const { onModalActive: modal } = useModal(null, 'checkout')
   const [ isClaimingPanelActive, setIsClaimingPanelActive ] = useState(false)
   // const [ currentCurrency, setCurrentCurrency ] = useState(CLAIMtoken.address)
   const CLAIMapprovalState = useState(true)
@@ -438,6 +443,7 @@ export function TradeComponent({ data }: { data: NFTItem }) {
       setIsCurrencyApproval(false)
     }
   }
+  const explorer = chain[chainId || 97].explorer
 
   // __RENDER
   return (
@@ -445,7 +451,7 @@ export function TradeComponent({ data }: { data: NFTItem }) {
       <div className='status'>
         <div className='columns owner'>
           <span className='label'>Owned by</span>
-          <a className='btn btn-default' href={`${chain.explorer}/address/${data.owner}`} target='_blank'>
+          <a className='btn btn-default' href={`${explorer}/address/${data.owner}`} target='_blank'>
             {data.owner === account ? 'You' : getShortAddress(data.owner)}
           </a>
         </div>
@@ -514,7 +520,8 @@ export function ModalChackout({ item, account }: { item: NFTItem; account: strin
   const [wait, setWait] = useState<boolean>(false)
   const [agree, setAgree] = useState<boolean>(false)
   const [allowance, setAllowance] = useState<number>(0)
-  const { onModelActive: modal } = useModal(null, 'success')
+  const { onModalActive: modal } = useModal(null, 'success')
+  const { chainId } = useWeb3React()
 
   const coinContract = useBEP20Contract(item.currency)
   const isBNB = lowerCase(item.currency) === 'bnb'
@@ -522,7 +529,7 @@ export function ModalChackout({ item, account }: { item: NFTItem; account: strin
   const tokenId = getRandom(item.tokenIds)
   const tokenPrice = toUint256(item.price)
   const tokenAddress = item.id
-  const marketAddress = marketContract.getAddress()
+  const marketAddress = marketContract.getAddress(chainId)
 
   // __EFFECTS <React.Hooks>
   useEffect(() => {
@@ -535,7 +542,7 @@ export function ModalChackout({ item, account }: { item: NFTItem; account: strin
     }
 
     async function getAllowance() {
-      const { methods } = coinContract.build()
+      const { methods } = coinContract.build(chainId || 97)
       const res = await methods.allowance(account, marketAddress).call()
       setAllowance(bigNumber(res).toNumber())
     }
@@ -557,7 +564,7 @@ export function ModalChackout({ item, account }: { item: NFTItem; account: strin
     setWait(true)
 
     try {
-      const { methods } = marketContract.build()
+      const { methods } = marketContract.build(chainId)
 
       let res: any = void 0
       if (isBNB) {
@@ -596,7 +603,7 @@ export function ModalChackout({ item, account }: { item: NFTItem; account: strin
     setWait(true)
 
     try {
-      const { methods } = coinContract.build()
+      const { methods } = coinContract.build(chainId || 97)
       const res: any = await methods.approve(marketAddress, tokenPrice.toString()).send({ from: account })
       if (res.status) {
         setAllowance(tokenPrice.toNumber())

@@ -9,7 +9,7 @@ import cls from 'classnames'
 export function NavbarComponent() {
   // __STATE <React.Hooks>
   const searchRef = useRef(null)
-  const { onModelActive } = useModal(null, 'Main Menu')
+  const { onModalActive } = useModal(null, 'Main Menu')
   const [_, setQuery, reset] = useQueryString()
 
   // __FUNCTIONS
@@ -26,7 +26,7 @@ export function NavbarComponent() {
   return (
     <nav className='ui--navbar'>
       <div className={cls('ui--navbar-container', { x2: isProduction })}>
-        <button className='btn btn-default btn-menu2' onClick={() => onModelActive(<GetMenuModal />)}>
+        <button className='btn btn-default btn-menu2' onClick={() => onModalActive(<GetMenuModal />)}>
           <span className='icon bi bi-justify' style={{
             fontSize: '24px'
           }}></span>

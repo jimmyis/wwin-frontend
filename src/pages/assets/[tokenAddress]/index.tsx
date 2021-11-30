@@ -6,11 +6,11 @@ import { chain } from '@/libs/configs'
 import { /* getQueryAt, */ getShortAddress,/*  loader */ } from '@/utils'
 import { NFTItem } from '@/types'
 import QRCode from 'react-qr-code'
+import { useDataContext } from '@/context'
 
-import { db } from '@/libs/firebase'
 import { doc, getDoc } from "firebase/firestore";
 
-async function getOneDoc(collection: string, id: string) {
+async function getOneDoc(db: any, collection: string, id: string) {
   const docRef = doc(db, collection, id);
   const docSnap = await getDoc(docRef);
   const data = docSnap.data();
@@ -21,6 +21,8 @@ export default function AssetsContainer() {
   // __STATE <React.Hooks>
   const { query } = useRouter()
   const [ state, setState ] = useState<NFTItem>()
+  
+  const { db } = useDataContext();
 
   // __EFFECTS <React.Hooks>
   useEffect(() => {
@@ -31,43 +33,10 @@ export default function AssetsContainer() {
         getNFTcollectionData(id)
       }
     })();
-    // async function run() {
-    //   const tokenAddress = getQueryAt(query.tokenAddress!)
-    //   const tokenId = getQueryAt(query.tokenId!)
-    //   let res: any = void 0
-
-    //   if (tokenId) {
-    //     res = await assetService.getOneByQuery({
-    //       NFTAddress: tokenAddress,
-    //       tokenId
-    //     })
-    //     console.log(res)
-    //   } else {
-    //     res = await assetService.getOne(tokenAddress)
-    //   }
-
-    //   if (res) {
-    //     setState({
-    //       ...res,
-    //       id: res.id || res.tokenAddress,
-    //       tokenId: res.tonkenId,
-    //       price: res.price || 0,
-    //       available: res.available || 0,
-    //       totalSupply: res.totalSupply || 1
-    //     })
-    //   }
-
-    //   loader('off')
-    // }
-
-    // if (query.tokenAddress) {
-    //   loader('on')
-    //   run()
-    // }
   }, [query])
 
   const getNFTcollectionData = async (id: string) => {
-    const NFTcollection = await getOneDoc("nft_collections", id)
+    const NFTcollection = await getOneDoc(db, "nft_collections", id)
     setState((NFTcollection as NFTItem))
   }
 

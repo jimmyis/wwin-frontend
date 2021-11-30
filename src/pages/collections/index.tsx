@@ -8,7 +8,7 @@ import cls from 'classnames'
 
 export default function CollectionContainer() {
   // __STATE <React.Hooks>
-  const { account } = useWeb3React()
+  const { account, /* chainId */ } = useWeb3React()
   const { isUser } = useRole()
   const [state, setState] = useState<Collection[]>([])
 

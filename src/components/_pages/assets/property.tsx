@@ -6,7 +6,8 @@ export interface Props {
 
 export function PropertyComponent({ data }: Props) {
   // __RENDER
-  if (!data.length) return null
+  if (!data || !Array.isArray(data)) return null
+
   return (
     <div className='ui--asset-property'>
       <div className='content-header'>properties</div>

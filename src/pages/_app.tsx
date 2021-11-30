@@ -10,15 +10,19 @@ import { getLibrary } from '@/utils/connectors'
 import { configs } from '@/libs/configs'
 import { loader } from '@/utils'
 import store from '@/store'
+import { DataProvider } from '@/context'
 import '@/utils/defineProperty'
 import '@style/main.scss'
 
 export default function Application({ Component: PagesContainer, pageProps }: AppProps) {
+  console.log("Built for", process.env.NEXT_PUBLIC_BUILD_ENV)
+  
   // __STATE <Rect.Hooks>
   const { events: routerEvents } = useRouter()
 
   // __EFFECTS <React.Hooks>
   useEffect(() => {
+    console.log(process.env.NEXT_PUBLIC_APP_NAME + " Application is Starting")
     routerEvents.on('routeChangeStart', () => loader('on'))
     routerEvents.on('routeChangeError', () => loader('off'))
     routerEvents.on('routeChangeComplete', () => loader('off'))
@@ -34,16 +38,18 @@ export default function Application({ Component: PagesContainer, pageProps }: Ap
       <main className='ui--wrapper'>
         <Web3ReactProvider getLibrary={getLibrary}>
           <Provider store={store}>
-            <UseEagerConnect />
+            <DataProvider>
+              <UseEagerConnect />
 
-            <NavbarComponent />
-            <LoaderComponent />
-            <DialogComponent />
-            <ModalComponent />
+              <NavbarComponent />
+              <LoaderComponent />
+              <DialogComponent />
+              <ModalComponent />
 
-            <PagesContainer {...pageProps} />
+              <PagesContainer {...pageProps} />
 
-            <FooterComponent />
+              <FooterComponent />
+            </DataProvider>
           </Provider>
         </Web3ReactProvider>
       </main>

@@ -1,13 +1,13 @@
-import { chain } from '@/libs/configs'
+// import { chain } from '@/libs/configs'
 import { AbiItem } from '@/libs/web3'
-import { Network } from '@/types/constants'
+// import { Network } from '@/types/constants'
 
 export const ContractName: string = 'BATHToken'
 
-export const ContractAddress: string = {
-  [Network.Main]: '0x0000000000000000000000000000000000000000',
-  [Network.Test]: '0x9CC3908A1b38BD966eE9c3a2Fbd96e1422EA2Bd6'
-}[chain.network]!
+export const ContractAddress: { [chainId: string | number]: string } = {
+  56: '0x0000000000000000000000000000000000000000',
+  97: '0x9CC3908A1b38BD966eE9c3a2Fbd96e1422EA2Bd6'
+}
 
 export const ContractAbi: AbiItem[] = [
   {

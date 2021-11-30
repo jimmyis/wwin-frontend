@@ -11,7 +11,7 @@ export interface Props {
 export function PropertyProvider({ onChange }: Props) {
   // __STATE <React.Hooks>
   const [data, setData] = useState<NFTProperty[]>([])
-  const { onModelActive } = useModal(null, 'Add Properties')
+  const { onModalActive } = useModal(null, 'Add Properties')
 
   // __EFFECTS <React.Hooks>
   useEffect(() => {
@@ -65,7 +65,7 @@ export function PropertyProvider({ onChange }: Props) {
             type='button'
             className='btn btn-modal'
             title='Remove'
-            onClick={() => onModelActive(<FormProperty onApply={handleApply} />)}
+            onClick={() => onModalActive(<FormProperty onApply={handleApply} />)}
           >
             <span className='icon bi bi-plus'></span>
           </button>

@@ -9,6 +9,7 @@ export interface Collection<T = any[]> {
 }
 
 export interface NFTItem {
+  _id: string
   id: string
   tokenAddress: string
   tokenId: string
@@ -34,6 +35,9 @@ export interface NFTItem {
   properties: NFTProperty[]
   is_presale: bool
   serialNoList?: [string]
+  status?: string
+  sell_type?: string
+  marketplace_item_id?: string
 }
 
 export interface NFTProperty {

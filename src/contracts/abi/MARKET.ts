@@ -1,13 +1,11 @@
-import { chain } from '@/libs/configs'
 import { AbiItem } from '@/libs/web3'
-import { Network } from '@/types/constants'
 
 export const ContractName: string = 'MarketPlace'
 
-export const ContractAddress: string = {
-  [Network.Main]: '0x84cad6549B3B97748DB6802F4AA0c6F41Dd4d408',
-  [Network.Test]: '0x8efB2A4C9Da79bC17e7bc47F382Fe538e5b5202A'
-}[chain.network]!
+export const ContractAddress: { [chainId: string | number]: string } = {
+  56: '0x84cad6549B3B97748DB6802F4AA0c6F41Dd4d408',
+  97: '0x8efB2A4C9Da79bC17e7bc47F382Fe538e5b5202A'
+}
 
 export const ContractAbi: AbiItem[] = [
   {

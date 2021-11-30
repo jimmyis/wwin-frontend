@@ -1,13 +1,13 @@
 import { ethers } from 'ethers'
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { BscConnector } from '@binance-chain/bsc-connector'
-import { chain } from '@/libs/configs'
+import { allowChains } from '@/libs/configs'
 import { Connectors } from '@/types/constants'
 
-const supportedChainIds = [chain.chainId]
+export const injected = new InjectedConnector({ supportedChainIds: allowChains })
+export const bsc = new BscConnector({ supportedChainIds: allowChains })
 
-export const injected = new InjectedConnector({ supportedChainIds })
-export const bsc = new BscConnector({ supportedChainIds })
+// console.log("allowChains", allowChains)
 
 export const connectorsBy: { [connector in Connectors]: any } = {
   [Connectors.Injected]: injected,

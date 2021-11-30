@@ -4,13 +4,15 @@ export const configs = {
   APP_WEB_TITLE: process.env.NEXT_PUBLIC_APP_WEB_TITLE || "3W'WIN - NFTs Marketplace",
   APP_BASE_URL: process.env.NEXT_PUBLIC_APP_BASE_URL || 'http://localhost:3000',
   APP_CLIENT_SIDE: process.browser,
+  APP_ENVIRONMENT: process.env.NEXT_PUBLIC_ENVIRONMENT || "development",
+  APP_BUILD_ENVIRONMENT: process.env.NEXT_PUBLIC_BUILD_ENV || "development",
 
   // XMLHttpRequest (XHR)
   API_GATEWAY: process.env.NEXT_PUBLIC_API_GATEWAY || 'http://localhost:3000/api',
   API_SECRET_KEY: process.env.NEXT_PUBLIC_API_SECRET_KEY || '4d54',
 
   // Chain Network
-  APP_CHAIN_ID: parseInt(process.env.NEXT_PUBLIC_CHAIN_ID || '97', 10),
+  APP_DEFAULT_CHAIN_ID: parseInt(process.env.NEXT_PUBLIC_CHAIN_ID || '97', 10),
 
   // STORAGE KEY-NAME
   APP_AUTH: 'APP.PassportToken',
@@ -31,8 +33,21 @@ export const configs = {
 export const isBrowser: boolean = configs.APP_CLIENT_SIDE || typeof window !== 'undefined'
 export const isDevelop: boolean = configs.APP_MODE === 'development'
 export const isProduction: boolean = configs.APP_MODE === 'production'
+export const allowChains: number[] = JSON.parse(process.env.NEXT_PUBLIC_SUPPORTED_CHAIN_ID || "[97]").map((chainId: string) => parseInt(chainId, 10))
+// export const allowChains: number[] = [56, 97]
+// console.log("Allow Chain", allowChains)
+export const environment: string = configs.APP_BUILD_ENVIRONMENT
 
-export const chain = {
+export let currentChainId = "97"
+
+export const changeCurrentChain = (newChainId: string | number | undefined) => {
+  // console.log("changing chain id to", newChainId, " from", currentChainId)
+  // console.log("Allow Chain", allowChains)
+  currentChainId = newChainId ? newChainId.toString() : "97"
+}
+
+
+export const chain: { [index: string | number]: any } = {
   56: {
     chainId: 56,
     network: 'mainnet',
@@ -43,7 +58,7 @@ export const chain = {
     network: 'testnet',
     explorer: 'https://testnet.bscscan.com'
   }
-}[configs.APP_CHAIN_ID]!
+}
 
 export const tokens = [
   {
